@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2ffd36a581284f77b0070e9b61e788c, type: 3}
+  m_Name: RichAttack
+  m_EditorClassIdentifier: 
+  moveName: Rich's Basic Attack
+  consumable: 0
+  targetsAllEnemies: 0
+  targetsAllAllies: 0
+  targetsSelfPassive: 0
+  cannotTargetSelf: 1
+  onlyTargetsSelf: 0
+  description: A basic attack.
+  messages: []
+  baseDamage: 20
