@@ -11,6 +11,8 @@ public class CharacterStats : MonoBehaviour
 
     public int currentHealth { get; protected set; }   // Current amount of health
 
+    public int currentPeekDamage;
+
     public Stat attack;
     public Stat defense;
     public Stat speed;
@@ -103,14 +105,16 @@ public class CharacterStats : MonoBehaviour
         }
 
         // Subtract damage from health
-        Debug.Log(transform.name + " will have " + (currentHealth - damage) + " health.");
+        Debug.Log(transform.name + " will have " + (currentPeekDamage - damage) + " health.");
 
         if (currentHealth - damage <=  0)
         {
             Debug.Log(transform.name + " is in peril!");
         }
 
-        return currentHealth - damage;
+        currentPeekDamage -= damage;
+
+        return currentPeekDamage;
     }
 
     // Heal the target.

@@ -179,6 +179,7 @@ MonoBehaviour:
   characterName: Paul
   maxHealth:
     baseValue: 100
+  currentPeekDamage: 100
   attack:
     baseValue: 5
   defense:
@@ -386,9 +387,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bccb2745a0c5c4aa5a756058aed035b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterName: Paul
+  characterName: Rich
   maxHealth:
     baseValue: 100
+  currentPeekDamage: 100
   attack:
     baseValue: 5
   defense:
@@ -443,6 +445,7 @@ MonoBehaviour:
   enemies: []
   fightOrder: []
   targetList: []
+  peekList: []
   chosenAction: {fileID: 0}
 --- !u!4 &727565335
 Transform:
@@ -678,9 +681,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bccb2745a0c5c4aa5a756058aed035b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterName: Paul
+  characterName: Rory
   maxHealth:
     baseValue: 100
+  currentPeekDamage: 100
   attack:
     baseValue: 5
   defense:
@@ -725,6 +729,7 @@ MonoBehaviour:
   characterName: Enemy
   maxHealth:
     baseValue: 100
+  currentPeekDamage: 0
   attack:
     baseValue: 3
   defense:
@@ -807,9 +812,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bccb2745a0c5c4aa5a756058aed035b5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  characterName: Paul
+  characterName: Luna
   maxHealth:
     baseValue: 100
+  currentPeekDamage: 100
   attack:
     baseValue: 5
   defense:

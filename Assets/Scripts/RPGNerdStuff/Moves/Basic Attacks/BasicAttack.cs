@@ -15,7 +15,7 @@ public class BasicAttack : Action
         // Displays if attack is lethal to anyone.
         if (target != null)
         {
-            return player.PeekAttackTarget(target, baseDamage, false)
+            return player.PeekAttackTarget(target, baseDamage, false);
         }
         else
         {

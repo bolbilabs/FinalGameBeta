@@ -15,7 +15,7 @@ public class ExplodeAttack : Action
         // Displays if attack is lethal to anyone.
         if (target != null)
         {
-            return (player.PeekAttackTarget(target, enemyDamage, false);
+            return (player.PeekAttackTarget(target, enemyDamage, false));
         }
         else
         {
@@ -41,6 +41,14 @@ public class ExplodeAttack : Action
         if (player != null && target != null)
         {
             player.AttackTarget(target, enemyDamage, false);
+        }
+    }
+
+
+    public override void PerformPassive(CharacterStats player, CharacterStats target)
+    {
+        if (player != null && target != null)
+        {
             player.TakeDamage(selfDamage, false);
         }
     }

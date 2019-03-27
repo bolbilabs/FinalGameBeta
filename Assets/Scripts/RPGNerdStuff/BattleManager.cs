@@ -56,6 +56,8 @@ public class BattleManager : MonoBehaviour
     //[SerializeField]
     //private List<List<Object>> actionParams;
     public Dictionary<int, List<List<Object>>> actionParams = new Dictionary<int, List<List<Object>>>();
+    public Dictionary<int, List<List<Object>>> peekParams = new Dictionary<int, List<List<Object>>>();
+
 
 
     List<Action> possibleActions = new List<Action>();
@@ -181,6 +183,8 @@ public class BattleManager : MonoBehaviour
         else if (Input.GetKeyDown("x")) {
             if (currentPlayer > 0)
             {
+                actionParams[currentPlayer-1] = new List<List<Object>>();
+                peekParams[currentPlayer-1] = new List<List<Object>>();
                 currentPlayer--;
                 goToTopMenu();
                 //if (actionParams.Siz > 0)
@@ -211,6 +215,7 @@ public class BattleManager : MonoBehaviour
     void goToTargetMenu()
     {
         menuState = 2;
+        currentTarget = 0;
         enemyLine = true;
 
 
@@ -221,6 +226,12 @@ public class BattleManager : MonoBehaviour
 
         if (chosenAction.onlyTargetsAllies)
         {
+            if (currentTarget == currentPlayer)
+            {
+                // Maybe a find next open for polish? Oh well.
+                currentTarget++;
+                currentTarget = mod(currentTarget, players.Count());
+            }
             enemyLine = false;
         } else if (chosenAction.onlyTargetsSelf)
         {
@@ -240,23 +251,52 @@ public class BattleManager : MonoBehaviour
             {
                 if (chosenAction != null)
                 {
-                    List<Object> currentPlayerList = new List<Object>();
 
-                    currentPlayerList.Add(players[currentPlayer]);
+                    actionParams[currentPlayer] =  new List<List<Object>>();
+                    peekParams[currentPlayer] = new List<List<Object>>();
 
-                    List<List<Object>> indexList = new List<List<Object>>();
+                    if (targetList.Any())
+                    {
+                        foreach (Object targetZ in targetList)
+                        {
+                            Object currentPlayerList = players[currentPlayer];
 
-                    List<Object> actionList = new List<Object>();
+                            List<Object> indexList = new List<Object>();
 
-                    actionList.Add(chosenAction);
+                            Object actionList = chosenAction;
 
-                    indexList.Add(currentPlayerList);
-                    indexList.Add(targetList);
-                    indexList.Add(actionList);
+                            indexList.Add(currentPlayerList);
+                            indexList.Add(targetZ);
+                            indexList.Add(actionList);
 
-                    actionParams[currentPlayer] = indexList;
 
-                    Action checkAction = ((Action)(actionParams[currentPlayer][actionParams[currentPlayer].Count() - 1][0]));
+                            actionParams[currentPlayer].Add(indexList);
+                        }
+                    }
+
+                    if (peekList.Any())
+                    {
+                        foreach (Object peekZ in peekList)
+                        {
+                            Object currentPlayerList = players[currentPlayer];
+
+                            List<Object> indexList = new List<Object>();
+
+                            Object actionList = chosenAction;
+
+                            indexList.Add(currentPlayerList);
+                            indexList.Add(peekZ);
+                            indexList.Add(actionList);
+
+
+                            peekParams[currentPlayer].Add(indexList);
+                        }
+                    }
+
+
+
+
+                    Action checkAction = ((Action)(actionParams[currentPlayer][0][2]));
 
                     Debug.Log("Locked in " + checkAction.moveName + "!");
 
@@ -282,45 +322,72 @@ public class BattleManager : MonoBehaviour
                 if (skipSub)
                 {
                     goToTopMenu();
+                    actionParams[currentPlayer] = new List<List<Object>>();
+                    peekParams[currentPlayer] = new List<List<Object>>();
+
                 }
                 else
                 {
                     goToSubMenu();
+                    actionParams[currentPlayer] = new List<List<Object>>();
+                    peekParams[currentPlayer] = new List<List<Object>>();
+
                 }
             }
             else if (Input.GetKeyDown("down"))
             {
-                enemyLine = !enemyLine;
-                if (enemyLine)
+                if (!chosenAction.onlyTargetsAllies && !chosenAction.onlyTargetsEnemies && !chosenAction.onlyTargetsSelf)
                 {
-                    Mathf.Clamp(currentTarget, 0, enemies.Count() - 1);
+                    enemyLine = !enemyLine;
+                    if (enemyLine)
+                    {
+                        currentTarget = Mathf.Clamp(currentTarget, 0, enemies.Count() - 1);
+                    }
+                    else
+                    {
+                        currentTarget = Mathf.Clamp(currentTarget, 0, players.Count() - 1);
+                    }
+                    if (currentTarget == currentPlayer && !enemyLine && chosenAction.cannotTargetSelf)
+                    {
+                        currentTarget++;
+                        currentTarget = mod(currentTarget, players.Count());
+                        if (currentTarget == currentPlayer)
+                        {
+                            enemyLine = true;
+                        }
+                    }
+                    UpdateUI();
                 }
-                else
-                {
-                    Mathf.Clamp(currentTarget, 0, players.Count() - 1);
-                }
-                UpdateUI();
             }
             else if (Input.GetKeyDown("up"))
             {
-                enemyLine = !enemyLine;
-                if (enemyLine)
+                if (!chosenAction.onlyTargetsAllies && !chosenAction.onlyTargetsEnemies && !chosenAction.onlyTargetsSelf)
                 {
-                    currentTarget = Mathf.Clamp(currentTarget, 0, enemies.Count() - 1);
+                    enemyLine = !enemyLine;
+                    if (enemyLine)
+                    {
+                        currentTarget = Mathf.Clamp(currentTarget, 0, enemies.Count() - 1);
+                    }
+                    else
+                    {
+                        currentTarget = Mathf.Clamp(currentTarget, 0, players.Count() - 1);
+                    }
+                    if (currentTarget == currentPlayer && !enemyLine && chosenAction.cannotTargetSelf)
+                    {
+                        currentTarget--;
+                        currentTarget = mod(currentTarget, players.Count());
+                        if (currentTarget == currentPlayer)
+                        {
+                            enemyLine = true;
+                        }
+                    }
+                    UpdateUI();
                 }
-                else
-                {
-                    currentTarget = Mathf.Clamp(currentTarget, 0, players.Count() - 1);
-                }
-                UpdateUI();
             }
             else if (Input.GetKeyDown("left"))
             {
                 currentTarget--;
-                if (currentTarget == currentPlayer && !enemyLine && chosenAction.cannotTargetSelf)
-                {
-                    currentTarget--;
-                }
+
                 if (enemyLine)
                 {
                     currentTarget = mod(currentTarget, enemies.Count());
@@ -328,6 +395,15 @@ public class BattleManager : MonoBehaviour
                 else
                 {
                     currentTarget = mod(currentTarget, players.Count());
+                }
+                if (currentTarget == currentPlayer && !enemyLine && chosenAction.cannotTargetSelf)
+                {
+                    currentTarget--;
+                    currentTarget = mod(currentTarget, players.Count());
+                    if (currentTarget == currentPlayer)
+                    {
+                        enemyLine = true;
+                    }
                 }
                 UpdateUI();
             }
@@ -341,6 +417,15 @@ public class BattleManager : MonoBehaviour
                 else
                 {
                     currentTarget = mod(currentTarget, players.Count());
+                }
+                if (currentTarget == currentPlayer && !enemyLine && chosenAction.cannotTargetSelf)
+                {
+                    currentTarget++;
+                    currentTarget = mod(currentTarget, players.Count());
+                    if (currentTarget == currentPlayer)
+                    {
+                        enemyLine = true;
+                    }
                 }
                 UpdateUI();
             }
@@ -394,6 +479,7 @@ public class BattleManager : MonoBehaviour
             } else if (Input.GetKeyDown("x"))
             {
                 menuState = 0;
+                UpdateUI();
             } else if (Input.GetKeyDown("down") || Input.GetKeyDown("right"))
             {
                 currentSubAction++;
@@ -439,22 +525,122 @@ public class BattleManager : MonoBehaviour
         {
             UpdateTargets();
 
-            // Display UI for targets
+
+            // Check total peek damage
+
+            foreach (GameObject current in fightOrder)
+            {
+                current.GetComponent<CharacterStats>().currentPeekDamage = current.GetComponent<CharacterStats>().currentHealth;
+            }
+
+            // FOR ENEMY ATTACKS
+
+
+
+
+            // OTHER PLAYER ATTACKS
+            if (actionParams.Values.ToList().Any())
+            {
+                foreach (List<List<Object>> listObjects in actionParams.Values.ToList())
+                {
+                    foreach (List<Object> objects in listObjects)
+                    {
+                        GameObject casterObj = (GameObject) objects[0];
+                        GameObject targetObj = (GameObject)objects[1];
+
+
+                        CharacterStats casterStats = casterObj.GetComponent<CharacterStats>();
+                        CharacterStats targetStats = targetObj.GetComponent<CharacterStats>();
+                        Action action = (Action)objects[2];
+
+                        action.Peek(casterStats, targetStats);
+                    }
+                }
+            }
+
+
+            if (peekParams.Values.ToList().Any())
+            {
+                foreach (List<List<Object>> listObjects in peekParams.Values.ToList())
+                {
+                    foreach (List<Object> objects in listObjects)
+                    {
+                        GameObject casterObj = (GameObject)objects[0];
+                        GameObject targetObj = (GameObject)objects[1];
+
+
+                        CharacterStats casterStats = casterObj.GetComponent<CharacterStats>();
+                        CharacterStats targetStats = targetObj.GetComponent<CharacterStats>();
+                        Action action = (Action)objects[2];
+
+                        action.PeekPassive(casterStats, targetStats);
+                    }
+                }
+            }
+
+            // CURRENT ACTIVE AND PASSIVE ATTACKS!! 
             if (peekList.Any())
             {
+
                 foreach (Object targetObj in peekList)
                 {
-                    string testString = "Targeting ";
-                    GameObject targetGameObj = (GameObject) targetObj;
+                    GameObject targetGameObj = (GameObject)targetObj;
+
+
 
                     CharacterStats targetStats = targetGameObj.GetComponent<CharacterStats>();
                     CharacterStats casterStats = players[currentPlayer].GetComponent<CharacterStats>();
 
+                    Debug.Log("Passiving:" + targetStats.characterName);
+
+
+                    chosenAction.PeekPassive(casterStats, targetStats);
+                    chosenAction.PeekPassive(casterStats, targetStats);
+
+
+                    //int deduct = casterStats.currentHealth - chosenAction.PeekPassive(casterStats, targetStats);
+
+
+                    //testString += targetStats.characterName + " for " + deduct;
+
+                    //if (chosenAction.Peek(casterStats, targetStats) <= 0)
+                    //{
+                    //    testString += " mortal";
+                    //}
+
+                    //testString += " damage!";
+
+                    //Debug.Log(testString);
+                }
+            }
+            if (targetList.Any()) { 
+
+            foreach (Object targetObj in targetList)
+                {
+                    GameObject targetGameObj = (GameObject)targetObj;
+
+                    CharacterStats targetStats = targetGameObj.GetComponent<CharacterStats>();
+                    CharacterStats casterStats = players[currentPlayer].GetComponent<CharacterStats>();
+
+
+                    Debug.Log("Targeting:" + targetStats.characterName);
+
+
                     chosenAction.Peek(casterStats, targetStats);
 
-                    
+                    //int deduct = casterStats.currentHealth - chosenAction.Peek(casterStats, targetStats);
 
-                    testString += (GameObject) targetObj
+
+                    //testString += targetStats.characterName + " for " + deduct;
+
+                    //if (chosenAction.Peek(casterStats, targetStats) <= 0)
+                    //{
+                    //    testString += " mortal";
+                    //}
+
+                    //testString += " damage!";
+
+                    //Debug.Log(testString);
                 }
             }
         }

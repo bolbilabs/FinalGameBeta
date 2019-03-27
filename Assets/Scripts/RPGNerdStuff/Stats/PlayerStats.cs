@@ -100,14 +100,16 @@ public class PlayerStats : CharacterStats
         }
 
         // Subtract damage from health
-        Debug.Log(transform.name + " will have " + (currentHealth - damage) + " health.");
+        Debug.Log(transform.name + " will have " + (currentPeekDamage - damage) + " health.");
 
         if (currentHealth - damage <= 0)
         {
             Debug.Log(transform.name + " is in peril!");
         }
 
-        return currentHealth - damage;
+        currentPeekDamage -= damage;
+
+        return currentPeekDamage;
     }
 
     // Heal the target.

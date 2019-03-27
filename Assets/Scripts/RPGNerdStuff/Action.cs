@@ -55,4 +55,11 @@ public class Action : ScriptableObject
 
         // Perform 
     }
+
+    public virtual void PerformPassive(CharacterStats player, CharacterStats target)
+    {
+        // Broadcast message
+
+        // Perform 
+    }
 }
