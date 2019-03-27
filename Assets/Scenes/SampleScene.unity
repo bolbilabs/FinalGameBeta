@@ -218,7 +218,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   basicAttack: {fileID: 11400000, guid: 8a5dc0bf9ef2c4b4eb757fa214533409, type: 2}
-  specialAttack: []
+  specialAttack:
+  - {fileID: 11400000, guid: 5afe0f2ea37e944129603fdf3ba2df29, type: 2}
+  - {fileID: 11400000, guid: b7d4aa1cb8f944c52a78dcc783779d40, type: 2}
   items: []
   assist: []
 --- !u!1 &519420028

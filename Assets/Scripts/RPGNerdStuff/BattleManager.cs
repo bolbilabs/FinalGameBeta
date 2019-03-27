@@ -33,16 +33,19 @@ public class BattleManager : MonoBehaviour
     private bool skipSub = false;
 
     [SerializeField]
-    private GameObject[] players;
+    private List<GameObject> players;
 
     [SerializeField]
-    private GameObject[] enemies;
+    private List<GameObject> enemies;
 
     [SerializeField]
     private List<GameObject> fightOrder;
 
     [SerializeField]
     private List<Object> targetList;
+
+    [SerializeField]
+    private List<Object> peekList;
 
     [SerializeField]
     private Action chosenAction = null;
@@ -53,6 +56,10 @@ public class BattleManager : MonoBehaviour
     //[SerializeField]
     //private List<List<Object>> actionParams;
     public Dictionary<int, List<List<Object>>> actionParams = new Dictionary<int, List<List<Object>>>();
+
+
+    List<Action> possibleActions = new List<Action>();
+
 
     // This function is called to start battles.
     // The parameter here is for non-random encounters
@@ -75,8 +82,8 @@ public class BattleManager : MonoBehaviour
     void Start()
     {
         // Placeholder for prototype
-        players = GameObject.FindGameObjectsWithTag("Player");
-        enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        players.AddRange(GameObject.FindGameObjectsWithTag("Player"));
+        enemies.AddRange(GameObject.FindGameObjectsWithTag("Enemy"));
 
         fightOrder.AddRange(players);
         fightOrder.AddRange(enemies);
@@ -97,7 +104,7 @@ public class BattleManager : MonoBehaviour
 
         //For each player, show the UI. Make the UI for each into a list.
 
-        if (currentPlayer < players.Length)
+        if (currentPlayer < players.Count())
         {
             UpdatePlayer(players[currentPlayer]);
         }
@@ -165,6 +172,10 @@ public class BattleManager : MonoBehaviour
                 skipSub = true;
                 chosenAction = players[currentPlayer].GetComponent<PlayerController>().basicAttack;
                 goToTargetMenu();
+            } else if (currentTopAction == 1)
+            {
+                skipSub = false;
+                goToSubMenu();
             }
         }
         else if (Input.GetKeyDown("x")) {
@@ -200,58 +211,154 @@ public class BattleManager : MonoBehaviour
     void goToTargetMenu()
     {
         menuState = 2;
+        enemyLine = true;
+
+
+        if (players.Count() <= 1 && chosenAction.cannotTargetSelf && (chosenAction.onlyTargetsAllies || (chosenAction.targetsAllAllies && !chosenAction.targetsAllEnemies)))
+        {
+            currentTarget = -1;
+        }
+
+        if (chosenAction.onlyTargetsAllies)
+        {
+            enemyLine = false;
+        } else if (chosenAction.onlyTargetsSelf)
+        {
+            enemyLine = false;
+            currentTarget = currentPlayer;
+        }
+
+
         UpdateUI();
     }
 
     void UpdateTargetMenu()
     {
-        if (Input.GetKeyDown("z"))
+        if (currentTarget != -1)
         {
-            if (chosenAction != null)
+            if (Input.GetKeyDown("z"))
             {
-                List<Object> currentPlayerList = new List<Object>();
-
-                currentPlayerList.Add(players[currentPlayer]);
-
-                List<List<Object>> indexList = new List<List<Object>>();
-
-                List<Object> actionList = new List<Object>();
-
-                actionList.Add(chosenAction);
-
-                indexList.Add(currentPlayerList);
-                indexList.Add(targetList);
-                indexList.Add(actionList);
-
-                actionParams[currentPlayer] = indexList;
-
-                Action checkAction = ((Action)(actionParams[currentPlayer][actionParams[currentPlayer].Count() - 1][0]));
-
-                Debug.Log("Locked in " + checkAction.moveName + "!");
-
-                if (currentPlayer < players.Length - 1)
+                if (chosenAction != null)
                 {
-                    currentPlayer++;
+                    List<Object> currentPlayerList = new List<Object>();
+
+                    currentPlayerList.Add(players[currentPlayer]);
+
+                    List<List<Object>> indexList = new List<List<Object>>();
+
+                    List<Object> actionList = new List<Object>();
+
+                    actionList.Add(chosenAction);
+
+                    indexList.Add(currentPlayerList);
+                    indexList.Add(targetList);
+                    indexList.Add(actionList);
+
+                    actionParams[currentPlayer] = indexList;
+
+                    Action checkAction = ((Action)(actionParams[currentPlayer][actionParams[currentPlayer].Count() - 1][0]));
+
+                    Debug.Log("Locked in " + checkAction.moveName + "!");
+
+                    if (currentPlayer < players.Count() - 1)
+                    {
+                        currentPlayer++;
+                        goToTopMenu();
+                    }
+                    else
+                    {
+                        Debug.Log("All players locked in!");
+
+                        // Execute
+                    }
+                }
+                else
+                {
+                    Debug.Log("Something's wrong.");
+                }
+            }
+            else if (Input.GetKeyDown("x"))
+            {
+                if (skipSub)
+                {
                     goToTopMenu();
                 }
                 else
                 {
-                    Debug.Log("All players locked in!");
+                    goToSubMenu();
                 }
             }
-            else
+            else if (Input.GetKeyDown("down"))
             {
-                Debug.Log("Something's wrong.");
+                enemyLine = !enemyLine;
+                if (enemyLine)
+                {
+                    Mathf.Clamp(currentTarget, 0, enemies.Count() - 1);
+                }
+                else
+                {
+                    Mathf.Clamp(currentTarget, 0, players.Count() - 1);
+                }
+                UpdateUI();
             }
-        } else if (Input.GetKeyDown("x"))
+            else if (Input.GetKeyDown("up"))
+            {
+                enemyLine = !enemyLine;
+                if (enemyLine)
+                {
+                    currentTarget = Mathf.Clamp(currentTarget, 0, enemies.Count() - 1);
+                }
+                else
+                {
+                    currentTarget = Mathf.Clamp(currentTarget, 0, players.Count() - 1);
+                }
+                UpdateUI();
+            }
+            else if (Input.GetKeyDown("left"))
+            {
+                currentTarget--;
+                if (currentTarget == currentPlayer && !enemyLine && chosenAction.cannotTargetSelf)
+                {
+                    currentTarget--;
+                }
+                if (enemyLine)
+                {
+                    currentTarget = mod(currentTarget, enemies.Count());
+                }
+                else
+                {
+                    currentTarget = mod(currentTarget, players.Count());
+                }
+                UpdateUI();
+            }
+            else if (Input.GetKeyDown("right"))
+            {
+                currentTarget++;
+                if (enemyLine)
+                {
+                    currentTarget = mod(currentTarget, enemies.Count());
+                }
+                else
+                {
+                    currentTarget = mod(currentTarget, players.Count());
+                }
+                UpdateUI();
+            }
+        }
+        else
         {
-            if (skipSub)
+            // Ally-only move, but all alone.
+            Debug.Log("Everyone's... gone.");
+            if (Input.GetKeyDown("x"))
             {
-                goToTopMenu();
-            }
-            else
-            {
-                goToSubMenu();
+                if (skipSub)
+                {
+                    goToTopMenu();
+                }
+                else
+                {
+                    goToSubMenu();
+                }
             }
         }
     }
@@ -261,6 +368,8 @@ public class BattleManager : MonoBehaviour
         skipSub = false;
         menuState = 1;
         currentSubAction = 0;
+        possibleActions.AddRange(players[currentPlayer].GetComponent<PlayerController>().specialAttack);
+
         UpdateUI();
 
         // Update UI
@@ -268,19 +377,34 @@ public class BattleManager : MonoBehaviour
 
     void UpdateSubMenu()
     {
-        List<Action> possibleActions = new List<Action>();
 
-        if (currentTopAction == 1)
-        {
-            // Specials
-            possibleActions.AddRange(players[currentPlayer].GetComponent<PlayerController>().specialAttack);
-        }
-
+        //if (currentTopAction == 1)
+        //{
+        //    // Specials
+        //    possibleActions.AddRange(players[currentPlayer].GetComponent<PlayerController>().specialAttack);
+        //}
 
 
         if (possibleActions.Any())
         {
-
+            if (Input.GetKeyDown("z"))
+            {
+                chosenAction = possibleActions[currentSubAction];
+                goToTargetMenu();
+            } else if (Input.GetKeyDown("x"))
+            {
+                menuState = 0;
+            } else if (Input.GetKeyDown("down") || Input.GetKeyDown("right"))
+            {
+                currentSubAction++;
+                currentSubAction = mod(currentSubAction, possibleActions.Count());
+                UpdateUI();
+            } else if (Input.GetKeyDown("up") || Input.GetKeyDown("left"))
+            {
+                currentSubAction--;
+                currentSubAction = mod(currentSubAction, possibleActions.Count());
+                UpdateUI();
+            }
         }
         else
         {
@@ -305,6 +429,93 @@ public class BattleManager : MonoBehaviour
             {
                 Debug.Log("Various Actions.");
             }
+        } else if (menuState == 1)
+        {
+            if (possibleActions.Any())
+            {
+                Debug.Log(possibleActions[currentSubAction].description);
+            }
+        } else if (menuState == 2)
+        {
+            UpdateTargets();
+
+            // Display UI for targets
+            if (peekList.Any())
+            {
+                foreach (Object targetObj in peekList)
+                {
+                    string testString = "Targeting ";
+                    GameObject targetGameObj = (GameObject) targetObj;
+
+                    CharacterStats targetStats = targetGameObj.GetComponent<CharacterStats>();
+                    CharacterStats casterStats = players[currentPlayer].GetComponent<CharacterStats>();
+
+                    chosenAction.Peek(casterStats, targetStats);
+
+                    
+
+                    testString += (GameObject) targetObj
+                }
+            }
+        }
+    }
+
+
+    void UpdateTargets()
+    {
+        targetList.Clear();
+        peekList.Clear();
+        if (!chosenAction.targetsAllEnemies && !chosenAction.targetsAllAllies && !chosenAction.onlyTargetsSelf)
+        {
+            if (enemyLine)
+            {
+                targetList.Add(enemies[currentTarget]);
+                //peekList.Add(enemies[currentTarget]);
+
+            }
+            else
+            {
+                targetList.Add(players[currentTarget]);
+                //peekList.Add(enemies[currentTarget]);
+            }
+        }
+        if (chosenAction.targetsAllEnemies)
+        {
+            targetList.AddRange(enemies);
+
+            //peekList.AddRange(enemies);
+        }
+        if (chosenAction.targetsAllAllies)
+        {
+            targetList.AddRange(players);
+            targetList.Remove(players[currentPlayer]);
+
+            //peekList.AddRange(players);
+            //peekList.Remove(players[currentPlayer]);
+
+        }
+        if (chosenAction.onlyTargetsSelf)
+        {
+            targetList.Add(players[currentPlayer]);
+
+            //peekList.Add(players[currentPlayer]);
+        }
+
+        
+        if (chosenAction.targetsAllAlliesPassive)
+        {
+            peekList.AddRange(players);
+            peekList.Remove(players[currentPlayer]);
+        }
+
+        if (chosenAction.targetsAllEnemiesPassive)
+        {
+            peekList.AddRange(enemies);
+        }
+
+        if (chosenAction.targetsSelfPassive)
+        {
+            peekList.Add(players[currentPlayer]);
         }
     }
 
