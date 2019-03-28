@@ -4,12 +4,13 @@
 
 public class CharacterStats : MonoBehaviour
 {
+    public AutoDialogue autoDialogue;
 
     public string characterName;
 
     public Stat maxHealth;          // Maximum amount of health
 
-    public int currentHealth { get; protected set; }   // Current amount of health
+    public int currentHealth;   // Current amount of health
 
     public int currentPeekDamage;
 
@@ -17,6 +18,8 @@ public class CharacterStats : MonoBehaviour
     public Stat defense;
     public Stat speed;
     public Stat accuracy;
+
+    public string[] superlatives;
 
     // TODO: Status Conditions
 
@@ -47,21 +50,29 @@ public class CharacterStats : MonoBehaviour
         currentHealth -= damage;
         Debug.Log(transform.name + " takes " + damage + " damage.");
 
-        // TODO: If we hit 0. Die. Death status condition?
-        //if (currentHealth <= 0)
-        //{
-        //    if (OnHealthReachedZero != null)
-        //    {
-        //        OnHealthReachedZero();
-        //    }
-        //}
+        string superlative = "";
+
+        if (damage >= 100)
+        {
+            Random random = new Random();
+            int randomNumber = Random.Range(0, superlatives.Length-1);
+            superlative = superlatives[randomNumber] + " ";
+        }
+
+        autoDialogue.sentences.Insert(0, superlative + characterName + " takes " + damage + " damage!");
+
+        if (currentHealth <= 0)
+        {
+            this.gameObject.SetActive(false);
+            autoDialogue.sentences.Insert(1, characterName + " is defeated!");
+        }
     }
 
 
     // Damage the target
     public virtual void AttackTarget(CharacterStats target, int damage, bool ignoreDefense)
     {
-        if (Random.Range(0, 100) < accuracy.GetValue() && target != null)
+        if (Random.Range(0, 100) < accuracy.GetValue() && target.gameObject.activeSelf)
         {
             // Adds attack stat boost.
             damage += attack.GetValue();
@@ -73,6 +84,8 @@ public class CharacterStats : MonoBehaviour
         else
         {
             Debug.Log("Attack misses!");
+            autoDialogue.sentences.Insert(0, "Attack misses!");
+
         }
     }
 
@@ -120,7 +133,7 @@ public class CharacterStats : MonoBehaviour
     // Heal the target.
     public virtual void Heal(CharacterStats target, int amount)
     {
-        if (target != null)
+        if (target.gameObject.activeSelf)
         {
             currentHealth += amount;
             currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth.GetValue());
@@ -128,6 +141,8 @@ public class CharacterStats : MonoBehaviour
         else
         {
             Debug.Log("Target does not exist?!?");
+            autoDialogue.sentences.Insert(0, "But it failed!");
+
         }
     }
 

@@ -14,12 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveName: Smile Shot
   consumable: 0
+  targetsAllEnemiesPassive: 0
+  targetsAllAlliesPassive: 0
   targetsAllEnemies: 0
   targetsAllAllies: 0
+  onlyTargetsEnemies: 1
+  onlyTargetsAllies: 0
   targetsSelfPassive: 1
   cannotTargetSelf: 1
   onlyTargetsSelf: 0
   description: A shot of radiation that attacks the heart. Inflicts recoil damage.
-  messages: []
+  message: Paul extends his hand and fires a blast of radiation!
   enemyDamage: 100
   selfDamage: 20

@@ -14,13 +14,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveName: Smile Bomb
   consumable: 0
+  targetsAllEnemiesPassive: 0
+  targetsAllAlliesPassive: 0
   targetsAllEnemies: 0
   targetsAllAllies: 0
+  onlyTargetsEnemies: 1
+  onlyTargetsAllies: 0
   targetsSelfPassive: 1
   cannotTargetSelf: 1
   onlyTargetsSelf: 0
   description: A self-sacrificing blast. Inflicts mortal damage to both target and
     user.
-  messages: []
+  message: Paul runs towards the enemy and clutches it tightly...
   enemyDamage: 99999
   selfDamage: 99999

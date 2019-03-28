@@ -5,6 +5,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
 
+[CreateAssetMenu(fileName = "New Action", menuName = "Attacks/Action")]
 public class Action : ScriptableObject
 {
     public string moveName = "New Action";
@@ -35,7 +36,7 @@ public class Action : ScriptableObject
 
     // Flavor text
     [TextArea(3, 10)]
-    public string[] messages;
+    public string message;
 
     public virtual int Peek (CharacterStats player, CharacterStats target)
     {

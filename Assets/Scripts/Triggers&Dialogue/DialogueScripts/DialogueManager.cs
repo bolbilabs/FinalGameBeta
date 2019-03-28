@@ -26,7 +26,7 @@ public class DialogueManager : MonoBehaviour
     
     private MonoBehaviour[] scriptTriggers;
 
-    public int lineSize = 31;
+    public int lineSize = 38;
 
     private int currentLine = 0;
     private int lineOffset = 0;
@@ -154,7 +154,7 @@ public class DialogueManager : MonoBehaviour
                         {
                             escape = true;
                         }
-                        if (currentLine + lineOffset >= lineSize)
+                        if (currentLine + lineOffset >= lineSize - 1)
                         {
                             dialogueText.text += '\n';
                             currentLine = -1;
@@ -195,7 +195,7 @@ public class DialogueManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKeyDown("space") || Input.GetKeyDown("left shift") || Input.GetMouseButtonDown(0))
+        if (Input.GetKey("z") || Input.GetKey("x"))
         {
             DisplayNextSentence();
         }

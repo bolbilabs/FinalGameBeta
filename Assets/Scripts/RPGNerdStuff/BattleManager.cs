@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using TMPro;
 
 public class BattleManager : MonoBehaviour
 {
@@ -55,8 +56,13 @@ public class BattleManager : MonoBehaviour
     //// Third index: Action
     //[SerializeField]
     //private List<List<Object>> actionParams;
-    public Dictionary<int, List<List<Object>>> actionParams = new Dictionary<int, List<List<Object>>>();
-    public Dictionary<int, List<List<Object>>> peekParams = new Dictionary<int, List<List<Object>>>();
+    public Dictionary<GameObject, List<List<Object>>> actionParams = new Dictionary<GameObject, List<List<Object>>>();
+    public Dictionary<GameObject, List<List<Object>>> peekParams = new Dictionary<GameObject, List<List<Object>>>();
+
+
+    public TextMeshProUGUI battleText;
+
+    public AutoDialogue autoDialogue;
 
 
 
@@ -81,23 +87,77 @@ public class BattleManager : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    public void Start()
     {
+        executing = false;
+        currentPlayer = 0;
+        //currentPlayer = 0;
+        //currentSubAction = 0;
+        //currentTopAction = 0;
+        //currentTarget = 0;
+        //menuState = 0;
+
         // Placeholder for prototype
+        players.Clear();
+        enemies.Clear();
         players.AddRange(GameObject.FindGameObjectsWithTag("Player"));
         enemies.AddRange(GameObject.FindGameObjectsWithTag("Enemy"));
 
+        fightOrder.Clear();
         fightOrder.AddRange(players);
         fightOrder.AddRange(enemies);
 
         // Determines turn order based on speed
         fightOrder = fightOrder.OrderByDescending(o => o.GetComponent<CharacterStats>().speed.GetValue()).ToList();
 
-        
+        actionParams = new Dictionary<GameObject, List<List<Object>>>();
+        peekParams = new Dictionary<GameObject, List<List<Object>>>();
+
+        // Simple enemy AI.
+        foreach (GameObject enemy in enemies)
+        {
+            Action enemyAction = enemy.GetComponent<EnemyController>().moves[Random.Range(0, enemy.GetComponent<EnemyController>().moves.Length - 1)];
+
+            if (enemyAction.onlyTargetsEnemies)
+            {
+                List<GameObject> enabledPlayers = new List<GameObject>();
+
+                foreach (GameObject player in players)
+                {
+                    if (player.activeSelf)
+                    {
+                        enabledPlayers.Add(player);
+                    }
+                }
+
+                GameObject target = enabledPlayers[Random.Range(0, enabledPlayers.Count-1)];
+                List<Object> buildList = new List<Object>();
+                buildList.Add(enemy);
+                buildList.Add(target);
+                buildList.Add(enemyAction);
+
+                actionParams[enemy] = new List<List<Object>>();
+
+                actionParams[enemy].Add(buildList);
+            }
+
+           
+        }
+
+        battleText.SetText("The party reels in anticipation.");
+
+        foreach (GameObject current in fightOrder)
+        {
+            current.GetComponent<CharacterStats>().currentPeekDamage = current.GetComponent<CharacterStats>().currentHealth;
+        }
+
+
+
+        goToTopMenu();
     }
 
     // Update is called once per frame
-    void Update()
+    public void Update()
     {
         // Enemy chooses who to attack here. PEAK Displayed.
 
@@ -122,15 +182,25 @@ public class BattleManager : MonoBehaviour
 
         // Select Top Action
 
-        if (menuState == 0)
+
+        if (!executing)
         {
-            UpdateTopMenu();
-        } else if (menuState == 1)
+            if (menuState == 0)
+            {
+                UpdateTopMenu();
+            }
+            else if (menuState == 1)
+            {
+                UpdateSubMenu();
+            }
+            else if (menuState == 2)
+            {
+                UpdateTargetMenu();
+            }
+        }
+        else
         {
-            UpdateSubMenu();
-        } else if (menuState == 2)
-        {
-            UpdateTargetMenu();
+            ExecuteActions();
         }
 
 
@@ -183,8 +253,8 @@ public class BattleManager : MonoBehaviour
         else if (Input.GetKeyDown("x")) {
             if (currentPlayer > 0)
             {
-                actionParams[currentPlayer-1] = new List<List<Object>>();
-                peekParams[currentPlayer-1] = new List<List<Object>>();
+                actionParams[players[currentPlayer-1]] = new List<List<Object>>();
+                peekParams[players[currentPlayer -1]] = new List<List<Object>>();
                 currentPlayer--;
                 goToTopMenu();
                 //if (actionParams.Siz > 0)
@@ -252,13 +322,15 @@ public class BattleManager : MonoBehaviour
                 if (chosenAction != null)
                 {
 
-                    actionParams[currentPlayer] =  new List<List<Object>>();
-                    peekParams[currentPlayer] = new List<List<Object>>();
+                    actionParams[players[currentPlayer]] =  new List<List<Object>>();
+                    peekParams[players[currentPlayer]] = new List<List<Object>>();
+
 
                     if (targetList.Any())
                     {
                         foreach (Object targetZ in targetList)
                         {
+
                             Object currentPlayerList = players[currentPlayer];
 
                             List<Object> indexList = new List<Object>();
@@ -270,7 +342,7 @@ public class BattleManager : MonoBehaviour
                             indexList.Add(actionList);
 
 
-                            actionParams[currentPlayer].Add(indexList);
+                            actionParams[players[currentPlayer]].Add(indexList);
                         }
                     }
 
@@ -289,14 +361,14 @@ public class BattleManager : MonoBehaviour
                             indexList.Add(actionList);
 
 
-                            peekParams[currentPlayer].Add(indexList);
+                            peekParams[players[currentPlayer]].Add(indexList);
                         }
                     }
 
 
 
 
-                    Action checkAction = ((Action)(actionParams[currentPlayer][0][2]));
+                    Action checkAction = ((Action)(actionParams[players[currentPlayer]][0][2]));
 
                     Debug.Log("Locked in " + checkAction.moveName + "!");
 
@@ -310,6 +382,18 @@ public class BattleManager : MonoBehaviour
                         Debug.Log("All players locked in!");
 
                         // Execute
+
+                        foreach (GameObject enemy in enemies)
+                        {
+                            GameObject targetY = (GameObject)enemy;
+
+                            Color color = targetY.GetComponent<SpriteRenderer>().color;
+                            color.r = 255; color.g = 255; color.b = 255;
+                            targetY.GetComponent<SpriteRenderer>().color = color;
+                        }
+
+                        goToExecuteActions();
+
                     }
                 }
                 else
@@ -322,15 +406,15 @@ public class BattleManager : MonoBehaviour
                 if (skipSub)
                 {
                     goToTopMenu();
-                    actionParams[currentPlayer] = new List<List<Object>>();
-                    peekParams[currentPlayer] = new List<List<Object>>();
+                    actionParams[players[currentPlayer]] = new List<List<Object>>();
+                    peekParams[players[currentPlayer]] = new List<List<Object>>();
 
                 }
                 else
                 {
                     goToSubMenu();
-                    actionParams[currentPlayer] = new List<List<Object>>();
-                    peekParams[currentPlayer] = new List<List<Object>>();
+                    actionParams[players[currentPlayer]] = new List<List<Object>>();
+                    peekParams[players[currentPlayer]] = new List<List<Object>>();
 
                 }
             }
@@ -453,6 +537,8 @@ public class BattleManager : MonoBehaviour
         skipSub = false;
         menuState = 1;
         currentSubAction = 0;
+
+        possibleActions.Clear();
         possibleActions.AddRange(players[currentPlayer].GetComponent<PlayerController>().specialAttack);
 
         UpdateUI();
@@ -494,7 +580,13 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
-            Debug.Log("Empty.");
+            //Debug.Log("Empty.");
+            battleText.SetText("No options to select. Press \"X\" to return.");
+            if (Input.GetKeyDown("x"))
+            {
+                menuState = 0;
+                UpdateUI();
+            }
         }
 
 
@@ -503,27 +595,70 @@ public class BattleManager : MonoBehaviour
 
     void UpdateUI()
     {
+        foreach (GameObject current in fightOrder)
+        {
+            current.GetComponent<CharacterStats>().currentPeekDamage = current.GetComponent<CharacterStats>().currentHealth;
+        }
+
+        foreach (GameObject enemy in enemies)
+        {
+            GameObject targetY = (GameObject)enemy;
+
+            Color color = targetY.GetComponent<SpriteRenderer>().color;
+            color.r = 255; color.g = 255; color.b = 255;
+            targetY.GetComponent<SpriteRenderer>().color = color;
+        }
+
         if (menuState == 0)
         {
             if (currentTopAction == 0)
             {
-                Debug.Log("Basic attack.");
+                //Debug.Log("Basic attack.");
+                battleText.SetText(players[currentPlayer].GetComponent<PlayerController>().basicAttack.description);
+
             } else if (currentTopAction == 1)
             {
-                Debug.Log("Special attacks.");
-            } else if (currentTopAction == 2)
+                //Debug.Log("Special attacks.");
+                battleText.SetText("Special moves.");
+            }
+            else if (currentTopAction == 2)
             {
-                Debug.Log("Various Actions.");
+                //Debug.Log("Various Actions.");
+                battleText.SetText("Various actions.");
+
             }
         } else if (menuState == 1)
         {
             if (possibleActions.Any())
             {
-                Debug.Log(possibleActions[currentSubAction].description);
+                //Debug.Log(possibleActions[currentSubAction].description);
+                battleText.SetText(possibleActions[currentSubAction].description);
+
             }
         } else if (menuState == 2)
         {
             UpdateTargets();
+
+            foreach (GameObject enemy in enemies)
+            {
+                GameObject targetY = (GameObject)enemy;
+
+                Color color = targetY.GetComponent<SpriteRenderer>().color;
+                if (!targetList.Contains(enemy))
+                {
+                    color.r = 0;
+                    color.g = 0;
+                    color.b = 0;
+                }
+                else
+                {
+                    color.r = 0;
+                    color.g = 255;
+                    color.b = 0;
+                }
+                targetY.GetComponent<SpriteRenderer>().color = color;
+
+            }
 
 
             // Check total peek damage
@@ -653,6 +788,7 @@ public class BattleManager : MonoBehaviour
         peekList.Clear();
         if (!chosenAction.targetsAllEnemies && !chosenAction.targetsAllAllies && !chosenAction.onlyTargetsSelf)
         {
+            battleText.SetText("Select a target!");
             if (enemyLine)
             {
                 targetList.Add(enemies[currentTarget]);
@@ -664,6 +800,11 @@ public class BattleManager : MonoBehaviour
                 targetList.Add(players[currentTarget]);
                 //peekList.Add(enemies[currentTarget]);
             }
+        }
+        else
+        {
+            battleText.SetText("Lock in targets!");
+
         }
         if (chosenAction.targetsAllEnemies)
         {
@@ -683,11 +824,13 @@ public class BattleManager : MonoBehaviour
         if (chosenAction.onlyTargetsSelf)
         {
             targetList.Add(players[currentPlayer]);
+            battleText.SetText("Lock in target!");
+
 
             //peekList.Add(players[currentPlayer]);
         }
 
-        
+
         if (chosenAction.targetsAllAlliesPassive)
         {
             peekList.AddRange(players);
@@ -704,6 +847,24 @@ public class BattleManager : MonoBehaviour
             peekList.Add(players[currentPlayer]);
         }
     }
+
+
+    public void goToExecuteActions()
+    {
+        executing = true;
+        battleText.SetText("");
+        autoDialogue.StartDialogue(fightOrder, actionParams, peekParams);
+    }
+
+    public void ExecuteActions()
+    {
+
+        //Action checkAction = ((Action)(actionParams[players[currentPlayer]][0][2]));
+
+
+
+    }
+
 
     int mod(int x, int m)
     {

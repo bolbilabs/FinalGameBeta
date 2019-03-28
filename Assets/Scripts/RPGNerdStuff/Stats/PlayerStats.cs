@@ -48,21 +48,37 @@ public class PlayerStats : CharacterStats
         currentHealth -= damage;
         Debug.Log(transform.name + " takes " + damage + " damage.");
 
-        // TODO: If we hit 0. Die. Death status condition?
-        //if (currentHealth <= 0)
+
+        //if (autoDialogue.sentences.Count >= autoDialogue.actionOrder.Count)
         //{
-        //    if (OnHealthReachedZero != null)
-        //    {
-        //        OnHealthReachedZero();
-        //    }
+            autoDialogue.sentences.Insert((autoDialogue.sentences.Count - autoDialogue.actionOrder.Count), characterName + " takes " + damage + " damage!");
+
         //}
+        //else
+        //{
+        //    autoDialogue.sentences.Insert(0, characterName + " takes " + damage + " damage!");
+        //}
+
+
+        // TODO: If we hit 0. Die. Death status condition?
+        if (currentHealth <= 0)
+        {
+            this.gameObject.SetActive(false);
+
+            //if (autoDialogue.sentences.Count >= autoDialogue.actionOrder.Count)
+            //{
+
+                autoDialogue.sentences.Insert((autoDialogue.sentences.Count - autoDialogue.actionOrder.Count), "Placeholder for character death.");
+            //}
+
+        }
     }
 
 
     // Damage the target
     public override void AttackTarget(CharacterStats target, int damage, bool ignoreDefense)
     {
-        if (Random.Range(0, 100) < accuracy.GetValue())
+        if (target.gameObject.activeSelf && Random.Range(0, 100) < accuracy.GetValue())
         {
             // Adds attack stat boost.
             damage += attack.GetValue() + (int)(hope * 0.1);
@@ -74,6 +90,7 @@ public class PlayerStats : CharacterStats
         else
         {
             Debug.Log("Attack misses!");
+            autoDialogue.sentences.Insert(0, "But it totally missed!");
             AdjustHope(this, -hopeFlux * 2);
         }
     }
@@ -115,8 +132,18 @@ public class PlayerStats : CharacterStats
     // Heal the target.
     public override void Heal(CharacterStats target, int amount)
     {
-        currentHealth += amount;
-        currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth.GetValue());
+        if (target != null)
+        {
+            currentHealth += amount;
+            currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth.GetValue());
+        }
+        else
+        {
+            Debug.Log("No matter how hard you try, you can never bring 'em back...");
+            autoDialogue.sentences.Insert(0, "No matter how hard you try, you can never bring 'em back...");
+
+            AdjustHope(this, -hopeFlux * 4);
+        }
     }
 
     public void AdjustHope(PlayerStats target, int value)
