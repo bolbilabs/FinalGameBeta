@@ -33,11 +33,9 @@ public class BattleManager : MonoBehaviour
     [SerializeField]
     private bool skipSub = false;
 
-    [SerializeField]
-    private List<GameObject> players;
+    public List<GameObject> players;
 
-    [SerializeField]
-    private List<GameObject> enemies;
+    public List<GameObject> enemies;
 
     [SerializeField]
     private List<GameObject> fightOrder;

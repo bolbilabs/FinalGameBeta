@@ -76,7 +76,6 @@ public class DialogueManager : MonoBehaviour
         foreach (string sentence in dialogue.sentences)
         {
             sentences.Enqueue(sentence);
-
         }
 
         //foreach (Sprite picture in dialogue.face)

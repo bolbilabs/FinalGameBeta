@@ -100,10 +100,14 @@ public class AutoDialogue : MonoBehaviour
         foreach (List<List<Object>> objects in actionOrder)
         {
             // First action's message has move description.
+            GameObject casterObj = (GameObject)(objects[0][0]);
 
-            Action action = (Action)objects[0][2];
+            if (casterObj.activeSelf)
+            {
+                Action action = (Action)objects[0][2];
 
-            sentences.Add(action.message);
+                sentences.Add(action.message);
+            }
         }
 
 
@@ -130,6 +134,18 @@ public class AutoDialogue : MonoBehaviour
 
     public void DisplayNextSentence()
     {
+        // TODO: End fight after all enemies defeated.
+        //bool foundEnabled = false;
+        //foreach (GameObject enemies in battleManager.enemies)
+        //{
+        //    if (enemies.activeSelf)
+        //    {
+        //        foundEnabled = true;
+        //    }
+        //}
+
+
+
         if (sentences.Count > 0)
         {
             if (!coroutineRunning)
@@ -156,8 +172,30 @@ public class AutoDialogue : MonoBehaviour
                 lineOffset = 0;
                 //string sentence = sentences.Dequeue();
 
+                string sentence = null;
 
-                string sentence = sentences[0];
+
+                if (actionOrder.Count > 0)
+                {
+                    List<List<Object>> objectsList = actionOrder[0];
+
+                    foreach (List<Object> objects in objectsList)
+                    {
+                        GameObject casterObj = (GameObject)objects[0];
+                        if (casterObj.activeSelf)
+                        {
+                            sentence = sentences[0];
+                        }
+                    }
+                }
+                else
+                {
+                    if (sentences.Count > 0)
+                    {
+                        sentence = sentences[0];
+                    }
+                }
+
                 sentences.RemoveAt(0);
 
                 //Debug.Log(sentence);
@@ -182,77 +220,83 @@ public class AutoDialogue : MonoBehaviour
 
     IEnumerator TypeSentence(string sentence)
     {
-        dialogueText.text = "<mspace=1em>";
-        currentSentence = sentence;
-        coroutineRunning = true;
-        foreach (char letter in sentence.ToCharArray())
+        if (sentence != null)
         {
-            dialogueText.text += letter;
-            if (letter == ' ')
+            dialogueText.text = "<mspace=1em>";
+            currentSentence = sentence;
+            coroutineRunning = true;
+            foreach (char letter in sentence.ToCharArray())
             {
-                string subStr = sentence.Substring(currentChar + 1);
-                lineOffset = 0;
-                bool escape = false;
-                foreach (char letter2 in subStr.ToCharArray())
+                dialogueText.text += letter;
+                if (letter == ' ')
                 {
-                    if (!escape)
+                    string subStr = sentence.Substring(currentChar + 1);
+                    lineOffset = 0;
+                    bool escape = false;
+                    foreach (char letter2 in subStr.ToCharArray())
                     {
-                        if (letter2 == ' ')
+                        if (!escape)
                         {
-                            escape = true;
+                            if (letter2 == ' ')
+                            {
+                                escape = true;
+                            }
+                            if (currentLine + lineOffset >= lineSize - 2)
+                            {
+                                dialogueText.text += '\n';
+                                currentLine = -1;
+                                escape = true;
+                            }
+                            lineOffset++;
                         }
-                        if (currentLine + lineOffset >= lineSize - 2)
-                        {
-                            dialogueText.text += '\n';
-                            currentLine = -1;
-                            escape = true;
-                        }
-                        lineOffset++;
                     }
                 }
+                currentChar++;
+                currentLine++;
+                yield return new WaitForSeconds(timeDelay);
             }
-            currentChar++;
-            currentLine++;
-            yield return new WaitForSeconds(timeDelay);
-        }
-        coroutineRunning = false;
-        yield return new WaitForSeconds((timeDelay * messagePause));
-        if (sentences.Count < actionOrder.Count)
-        {
-            if (actionOrder.Count > 0)
+            coroutineRunning = false;
+            yield return new WaitForSeconds((timeDelay * messagePause));
+            if (sentences.Count < actionOrder.Count)
             {
-                List<List<Object>> objectsList = actionOrder[0];
-                actionOrder.RemoveAt(0);
-
-                foreach (List<Object> objects in objectsList)
+                if (actionOrder.Count > 0)
                 {
-                    GameObject casterObj = (GameObject)objects[0];
-                    GameObject targetObj = (GameObject)objects[1];
+                    List<List<Object>> objectsList = actionOrder[0];
+                    actionOrder.RemoveAt(0);
+
+                    foreach (List<Object> objects in objectsList)
+                    {
+                        GameObject casterObj = (GameObject)objects[0];
+                        GameObject targetObj = (GameObject)objects[1];
 
 
-                    CharacterStats casterStats = casterObj.GetComponent<CharacterStats>();
-                    CharacterStats targetStats = targetObj.GetComponent<CharacterStats>();
-                    Action action = (Action)objects[2];
-                    action.Perform(casterStats, targetStats);
+                        CharacterStats casterStats = casterObj.GetComponent<CharacterStats>();
+                        CharacterStats targetStats = targetObj.GetComponent<CharacterStats>();
+                        Action action = (Action)objects[2];
+                        if (casterObj.activeSelf)
+                        {
+                            action.Perform(casterStats, targetStats);
+                        }
+                    }
                 }
-            }
 
-            if (passiveOrder.Count > 0)
-            {
-                List<List<Object>> objectsList = passiveOrder[0];
-                passiveOrder.RemoveAt(0);
-
-                foreach (List<Object> objects in objectsList)
+                if (passiveOrder.Count > 0)
                 {
-                    GameObject casterObj = (GameObject)objects[0];
-                    GameObject targetObj = (GameObject)objects[1];
+                    List<List<Object>> objectsList = passiveOrder[0];
+                    passiveOrder.RemoveAt(0);
+
+                    foreach (List<Object> objects in objectsList)
+                    {
+                        GameObject casterObj = (GameObject)objects[0];
+                        GameObject targetObj = (GameObject)objects[1];
 
 
-                    CharacterStats casterStats = casterObj.GetComponent<CharacterStats>();
-                    CharacterStats targetStats = targetObj.GetComponent<CharacterStats>();
-                    Action action = (Action)objects[2];
-                    Debug.Log("TESTING!");
-                    action.PerformPassive(casterStats, targetStats);
+                        CharacterStats casterStats = casterObj.GetComponent<CharacterStats>();
+                        CharacterStats targetStats = targetObj.GetComponent<CharacterStats>();
+                        Action action = (Action)objects[2];
+                        Debug.Log("TESTING!");
+                        action.PerformPassive(casterStats, targetStats);
+                    }
                 }
             }
         }
