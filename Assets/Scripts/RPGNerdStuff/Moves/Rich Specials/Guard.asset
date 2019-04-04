@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3fb6e124f9d434f539592d63586cca91, type: 3}
+  m_Name: Guard
+  m_EditorClassIdentifier: 
+  moveName: Guard
+  consumable: 0
+  targetsAllEnemiesPassive: 0
+  targetsAllAlliesPassive: 0
+  targetsAllEnemies: 0
+  targetsAllAllies: 0
+  onlyTargetsEnemies: 0
+  onlyTargetsAllies: 1
+  targetsSelfPassive: 0
+  cannotTargetSelf: 1
+  onlyTargetsSelf: 0
+  description: Rich sacrifices his life to protect a friend.
+  message: 
+  percentage: 50

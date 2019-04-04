@@ -6,6 +6,10 @@ using TMPro;
 
 public class BattleManager : MonoBehaviour
 {
+    public Animator animator;
+    public Animator healthBarAnim;
+
+
     public bool inBattle = true;
 
     public bool executing = false;
@@ -25,6 +29,11 @@ public class BattleManager : MonoBehaviour
     private int numTopActions = 3;
 
     private int numSubAction = 0;
+
+    private int buffer = 0;
+
+    public int deathparam = 0;
+
 
 
     [SerializeField]
@@ -49,6 +58,8 @@ public class BattleManager : MonoBehaviour
     [SerializeField]
     private Action chosenAction = null;
 
+    private static BattleManager instance;
+
     //// First index: Player
     //// Second index: Target
     //// Third index: Action
@@ -57,14 +68,24 @@ public class BattleManager : MonoBehaviour
     public Dictionary<GameObject, List<List<Object>>> actionParams = new Dictionary<GameObject, List<List<Object>>>();
     public Dictionary<GameObject, List<List<Object>>> peekParams = new Dictionary<GameObject, List<List<Object>>>();
 
+    public List<int> skipIndex = new List<int>();
+
 
     public TextMeshProUGUI battleText;
 
     public AutoDialogue autoDialogue;
 
+    int width = 640;
+    int height = 480;
+
+    public GameObject currentDial = null;
+
 
 
     List<Action> possibleActions = new List<Action>();
+
+    public List<GameObject> healthBlocks = new List<GameObject>();
+
 
 
     // This function is called to start battles.
@@ -84,6 +105,21 @@ public class BattleManager : MonoBehaviour
 
     }
 
+    public static BattleManager GetInstance()
+    {
+        return instance;
+    }
+
+    public void Awake()
+    {
+        if (instance == null)
+        {
+            instance = this;
+        }
+
+        Screen.SetResolution(width, height, true, 60);
+    }
+
     // Start is called before the first frame update
     public void Start()
     {
@@ -96,10 +132,47 @@ public class BattleManager : MonoBehaviour
         //menuState = 0;
 
         // Placeholder for prototype
+        int skip = 0;
+        foreach (GameObject player in players)
+        {
+            if (!player.activeSelf)
+            {
+                skipIndex.Add(skip);
+            }
+            skip++;
+        }
+
         players.Clear();
         enemies.Clear();
         players.AddRange(GameObject.FindGameObjectsWithTag("Player"));
         enemies.AddRange(GameObject.FindGameObjectsWithTag("Enemy"));
+        //dialList.AddRange(GameObject.FindGameObjectsWithTag("Dials"));
+
+
+
+        healthBlocks.Clear();
+
+        int i = 0;
+        int offset = 0;
+        foreach (GameObject player in players)
+        {
+            if (player.activeSelf)
+            {
+                foreach (int skipper in skipIndex)
+                {
+                    if (i == skipper)
+                    {
+                        offset++;
+                    }
+                }
+                GameObject.FindGameObjectWithTag("HealthBlock").transform.GetChild(i+offset).gameObject.SetActive(true);
+                healthBlocks.Add(GameObject.FindGameObjectWithTag("HealthBlock").transform.GetChild(i+offset).gameObject);
+                PlayerStats currStats = player.GetComponent<PlayerStats>();
+                healthBlocks[i].transform.GetChild(0).GetChild(1).GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>().SetText(currStats.characterName + "\n" + currStats.currentHealth + "/" + currStats.maxHealth.GetValue());
+                healthBlocks[i].transform.GetChild(0).GetChild(1).GetChild(0).GetChild(3).GetComponent<SpriteRenderer>().sprite = currStats.bodySprite;
+            }
+            i++;
+        }
 
         fightOrder.Clear();
         fightOrder.AddRange(players);
@@ -111,10 +184,17 @@ public class BattleManager : MonoBehaviour
         actionParams = new Dictionary<GameObject, List<List<Object>>>();
         peekParams = new Dictionary<GameObject, List<List<Object>>>();
 
+        foreach (GameObject player in players)
+        {
+            player.GetComponent<CharacterStats>().TurnOver();
+        }
+
         // Simple enemy AI.
         foreach (GameObject enemy in enemies)
         {
-            Action enemyAction = enemy.GetComponent<EnemyController>().moves[Random.Range(0, enemy.GetComponent<EnemyController>().moves.Length - 1)];
+            enemy.GetComponent<CharacterStats>().TurnOver();
+
+            Action enemyAction = enemy.GetComponent<EnemyController>().moves[Random.Range(0, enemy.GetComponent<EnemyController>().moves.Length)];
 
             if (enemyAction.onlyTargetsEnemies)
             {
@@ -128,7 +208,7 @@ public class BattleManager : MonoBehaviour
                     }
                 }
 
-                GameObject target = enabledPlayers[Random.Range(0, enabledPlayers.Count-1)];
+                GameObject target = enabledPlayers[Random.Range(0, enabledPlayers.Count)];
                 List<Object> buildList = new List<Object>();
                 buildList.Add(enemy);
                 buildList.Add(target);
@@ -138,8 +218,7 @@ public class BattleManager : MonoBehaviour
 
                 actionParams[enemy].Add(buildList);
             }
-
-           
+          
         }
 
         battleText.SetText("The party reels in anticipation.");
@@ -168,6 +247,7 @@ public class BattleManager : MonoBehaviour
         {
             UpdatePlayer(players[currentPlayer]);
         }
+
     }
 
     // These UpdatePlayers are the player states
@@ -223,10 +303,33 @@ public class BattleManager : MonoBehaviour
 
     void goToTopMenu ()
     {
+        Transform t = healthBlocks[currentPlayer].transform.GetChild(0).transform;
+
+        //currentDial = new GameObject();
+
+        foreach(Transform tr in t)
+           {
+            if (tr.tag == "Dials")
+            {
+                currentDial = tr.gameObject;
+            }
+        }
+
+
         skipSub = false;
         menuState = 0;
         currentTopAction = 0;
+
+        animator = currentDial.GetComponent<Animator>();
+        healthBarAnim = healthBlocks[currentPlayer].GetComponent<Animator>();
+
+        healthBarAnim.SetInteger("State", 1);
+
+
+
         UpdateUI();
+        currentDial.GetComponent<DialChildren>().ForceUpdate();
+
 
         // Update UI
     }
@@ -254,6 +357,7 @@ public class BattleManager : MonoBehaviour
                 actionParams[players[currentPlayer-1]] = new List<List<Object>>();
                 peekParams[players[currentPlayer -1]] = new List<List<Object>>();
                 currentPlayer--;
+                healthBarAnim.SetInteger("State", 0);
                 goToTopMenu();
                 //if (actionParams.Siz > 0)
                 //{
@@ -265,19 +369,61 @@ public class BattleManager : MonoBehaviour
             {
                 Debug.Log("Nevermore");
             }
-        } else if (Input.GetKeyDown("down") || Input.GetKeyDown("right"))
+        } else if (Input.GetKey("down") || Input.GetKey("right"))
         {
-            currentTopAction++;
-            currentTopAction = mod(currentTopAction, numTopActions);
-            UpdateUI();
-        } else if (Input.GetKeyDown("up") || Input.GetKeyDown("left"))
+            //Debug.Log("Base: " + animator.GetLayerIndex("Normal"));
+
+            if (animator.GetInteger("Direction") == 0 && buffer == 0)
+            {
+                currentTopAction++;
+                currentTopAction = mod(currentTopAction, numTopActions);
+                animator.SetInteger("Direction", -1);
+                currentDial.GetComponent<DialChildren>().dialChildren[0].SetActive(false);
+
+                UpdateUI();
+            }
+            else if (animator.GetInteger("Direction") == 0 && buffer != 0)
+            {
+                buffer = 0;
+            } 
+            else
+            {
+                buffer = -1;
+            }
+        } else if (Input.GetKey("up") || Input.GetKey("left"))
         {
-            currentTopAction--;
-            currentTopAction = mod(currentTopAction, numTopActions);
-            UpdateUI();
+            if (animator.GetInteger("Direction") == 0 && buffer == 0)
+            {
+                currentTopAction--;
+                currentTopAction = mod(currentTopAction, numTopActions);
+                animator.SetInteger("Direction", 1);
+                UpdateUI();
+            }
+            else if (animator.GetInteger("Direction") == 0 && buffer != 0)
+            {
+                buffer = 0;
+            }
+            else
+            {
+                buffer = 1;
+            }
         }
 
-
+        //if (buffer < 0 && animator.GetInteger("Direction") == 0)
+        //{
+        //    currentTopAction++;
+        //    currentTopAction = mod(currentTopAction, numTopActions);
+        //    animator.SetInteger("Direction", -1);
+        //    UpdateUI();
+        //    buffer = 0;
+        //} else if (buffer > 0 && animator.GetInteger("Direction") == 0)
+        //{
+        //    currentTopAction--;
+        //    currentTopAction = mod(currentTopAction, numTopActions);
+        //    animator.SetInteger("Direction", 1);
+        //    UpdateUI();
+        //    buffer = 0;
+        //}
     }
 
     void goToTargetMenu()
@@ -285,6 +431,9 @@ public class BattleManager : MonoBehaviour
         menuState = 2;
         currentTarget = 0;
         enemyLine = true;
+
+        healthBarAnim.SetInteger("State", 2);
+
 
 
         if (players.Count() <= 1 && chosenAction.cannotTargetSelf && (chosenAction.onlyTargetsAllies || (chosenAction.targetsAllAllies && !chosenAction.targetsAllEnemies)))
@@ -401,6 +550,8 @@ public class BattleManager : MonoBehaviour
             }
             else if (Input.GetKeyDown("x"))
             {
+                healthBarAnim.SetInteger("State", 1);
+
                 if (skipSub)
                 {
                     goToTopMenu();
@@ -516,6 +667,8 @@ public class BattleManager : MonoBehaviour
         {
             // Ally-only move, but all alone.
             Debug.Log("Everyone's... gone.");
+            battleText.SetText("Everyone's... gone.");
+
             if (Input.GetKeyDown("x"))
             {
                 if (skipSub)
@@ -532,12 +685,15 @@ public class BattleManager : MonoBehaviour
 
     void goToSubMenu()
     {
+        currentDial.GetComponent<DialChildren>().ForceUpdate();
+
         skipSub = false;
         menuState = 1;
         currentSubAction = 0;
 
         possibleActions.Clear();
         possibleActions.AddRange(players[currentPlayer].GetComponent<PlayerController>().specialAttack);
+        
 
         UpdateUI();
 
@@ -564,16 +720,46 @@ public class BattleManager : MonoBehaviour
             {
                 menuState = 0;
                 UpdateUI();
-            } else if (Input.GetKeyDown("down") || Input.GetKeyDown("right"))
+                currentDial.GetComponent<DialChildren>().ForceUpdate();
+            }
+            else if (Input.GetKey("down") || Input.GetKey("right"))
             {
-                currentSubAction++;
-                currentSubAction = mod(currentSubAction, possibleActions.Count());
-                UpdateUI();
-            } else if (Input.GetKeyDown("up") || Input.GetKeyDown("left"))
+                if (animator.GetInteger("Direction") == 0 && buffer == 0)
+                {
+                    currentSubAction++;
+                    currentSubAction = mod(currentSubAction, possibleActions.Count());
+
+                    animator.SetInteger("Direction", -1);
+                    currentDial.GetComponent<DialChildren>().dialChildren[0].SetActive(false);
+
+                    UpdateUI();
+                }
+                else if (animator.GetInteger("Direction") == 0 && buffer != 0)
+                {
+                    buffer = 0;
+                }
+                else
+                {
+                    buffer = -1;
+                }
+            } else if (Input.GetKey("up") || Input.GetKey("left"))
             {
-                currentSubAction--;
-                currentSubAction = mod(currentSubAction, possibleActions.Count());
-                UpdateUI();
+                if (animator.GetInteger("Direction") == 0 && buffer == 0)
+                {
+                    currentSubAction--;
+                    currentSubAction = mod(currentSubAction, possibleActions.Count());
+                    animator.SetInteger("Direction", 1);
+
+                    UpdateUI();
+                }
+                else if (animator.GetInteger("Direction") == 0 && buffer != 0)
+                {
+                    buffer = 0;
+                }
+                else
+                {
+                    buffer = 1;
+                }
             }
         }
         else
@@ -584,6 +770,7 @@ public class BattleManager : MonoBehaviour
             {
                 menuState = 0;
                 UpdateUI();
+                currentDial.GetComponent<DialChildren>().ForceUpdate();
             }
         }
 
@@ -593,6 +780,7 @@ public class BattleManager : MonoBehaviour
 
     void UpdateUI()
     {
+
         foreach (GameObject current in fightOrder)
         {
             current.GetComponent<CharacterStats>().currentPeekDamage = current.GetComponent<CharacterStats>().currentHealth;
@@ -863,9 +1051,18 @@ public class BattleManager : MonoBehaviour
 
     }
 
+    public void OnAnimationEvent (int direction)
+    {
+
+    }
+
 
     int mod(int x, int m)
     {
         return (x % m + m) % m;
     }
+
+
+
+
 }

@@ -19,6 +19,12 @@ public class CharacterStats : MonoBehaviour
     public Stat speed;
     public Stat accuracy;
 
+    public bool isGuarded = false;
+    public bool isPermahealed = false;
+    public bool isRoared = false;
+
+    public CharacterStats rory;
+
     public string[] superlatives;
 
     // TODO: Status Conditions
@@ -55,37 +61,56 @@ public class CharacterStats : MonoBehaviour
         if (damage >= 100)
         {
             Random random = new Random();
-            int randomNumber = Random.Range(0, superlatives.Length-1);
+            int randomNumber = Random.Range(0, superlatives.Length - 1);
             superlative = superlatives[randomNumber] + " ";
         }
 
-        autoDialogue.sentences.Insert(0, superlative + characterName + " takes " + damage + " damage!");
+        autoDialogue.MessageMe(superlative + characterName + " takes " + damage + " damage!");
 
         if (currentHealth <= 0)
         {
             this.gameObject.SetActive(false);
-            autoDialogue.sentences.Insert(1, characterName + " is defeated!");
+            autoDialogue.MessageMe(characterName + " is defeated!");
         }
+
     }
 
 
     // Damage the target
     public virtual void AttackTarget(CharacterStats target, int damage, bool ignoreDefense)
     {
-        if (Random.Range(0, 100) < accuracy.GetValue() && target.gameObject.activeSelf)
+        if (!isRoared)
         {
-            // Adds attack stat boost.
-            damage += attack.GetValue();
-            // Clamps to make sure not below zero.
-            damage = Mathf.Clamp(damage, 0, int.MaxValue);
+            if (Random.Range(0, 100) < accuracy.GetValue() && target.gameObject.activeSelf)
+            {
+                // Adds attack stat boost.
+                damage += attack.GetValue();
+                // Clamps to make sure not below zero.
+                damage = Mathf.Clamp(damage, 0, int.MaxValue);
 
-            target.TakeDamage(damage, ignoreDefense);
+                target.TakeDamage(damage, ignoreDefense);
+            }
+            else
+            {
+                Debug.Log("Attack misses!");
+                autoDialogue.MessageMe("Attack misses!");
+
+
+            }
         }
         else
         {
-            Debug.Log("Attack misses!");
-            autoDialogue.sentences.Insert(0, "Attack misses!");
-
+            if (rory.gameObject.activeSelf)
+            {
+                autoDialogue.MessageMe(characterName + ",& in a state of pure survival,& attacks Rory with all of its strength.");
+                rory.TakeDamage(99999, true);
+                isRoared = false;
+            }
+            else
+            {
+                autoDialogue.MessageMe("Still panicked,&&&% " + characterName + " further mutilates Rory's carcass.");
+                isRoared = false;
+            }
         }
     }
 
@@ -120,7 +145,7 @@ public class CharacterStats : MonoBehaviour
         // Subtract damage from health
         Debug.Log(transform.name + " will have " + (currentPeekDamage - damage) + " health.");
 
-        if (currentHealth - damage <=  0)
+        if (currentHealth - damage <= 0)
         {
             Debug.Log(transform.name + " is in peril!");
         }
@@ -135,15 +160,54 @@ public class CharacterStats : MonoBehaviour
     {
         if (target.gameObject.activeSelf)
         {
-            currentHealth += amount;
+            target.currentHealth += amount;
             currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth.GetValue());
+            autoDialogue.MessageMe(characterName + " gains " + amount + " health!");
+
         }
         else
         {
             Debug.Log("Target does not exist?!?");
-            autoDialogue.sentences.Insert(0, "But it failed!");
+            autoDialogue.MessageMe("But it failed!");
 
         }
     }
 
+    public virtual int PeekHeal(CharacterStats target, int amount)
+    {
+        // Subtract the armor value - Make sure damage doesn't go below 0.
+        amount += attack.GetValue();
+        amount = Mathf.Clamp(amount, 0, int.MaxValue);
+
+        // Subtract damage from health
+        Debug.Log(transform.name + " will have " + (currentPeekDamage + amount) + " health.");
+
+        //if (currentHealth - damage <= 0)
+        //{
+        //    Debug.Log(transform.name + " is in peril!");
+        //}
+
+        currentPeekDamage += amount;
+
+        return currentPeekDamage;
+    }
+
+    public virtual void GuardOn()
+    {
+    }
+
+    public virtual void PermahealOn()
+    {
+    }
+
+    public virtual void RoryOn(CharacterStats roryStats)
+    {
+        rory = roryStats;
+        autoDialogue.MessageMe(characterName + " begins to fear Rory greatly.");
+        isRoared = true;
+    }
+
+    public virtual void TurnOver()
+    {
+    }
 }

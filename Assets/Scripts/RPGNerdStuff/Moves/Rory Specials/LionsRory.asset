@@ -1,0 +1,28 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 779be8c47a4f74088b45ceb5c4d353f9, type: 3}
+  m_Name: LionsRory
+  m_EditorClassIdentifier: 
+  moveName: Lion's Rory
+  consumable: 0
+  targetsAllEnemiesPassive: 0
+  targetsAllAlliesPassive: 1
+  targetsAllEnemies: 1
+  targetsAllAllies: 0
+  onlyTargetsEnemies: 0
+  onlyTargetsAllies: 0
+  targetsSelfPassive: 0
+  cannotTargetSelf: 1
+  onlyTargetsSelf: 0
+  description: Rory finds his bravery and taunts the enemies, causing them to retaliate.
+    Rory will not survive the onslaught.
+  message: 

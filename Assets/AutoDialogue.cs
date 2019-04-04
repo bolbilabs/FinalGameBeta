@@ -8,6 +8,7 @@ public class AutoDialogue : MonoBehaviour
 {
     public List<string> sentences;
     //private Queue<Sprite> images;
+    public List<string> bonusSentences;
 
     public TextMeshProUGUI dialogueText;
 
@@ -41,6 +42,8 @@ public class AutoDialogue : MonoBehaviour
 
     private int currentChar = 0;
 
+
+    // List of characters, list of actions, list of triple objects
     public List<List<List<Object>>> actionOrder = new List<List<List<Object>>>();
     public List<List<List<Object>>> passiveOrder = new List<List<List<Object>>>();
 
@@ -90,24 +93,33 @@ public class AutoDialogue : MonoBehaviour
             {
                 actionOrder.Add(actionParams[gObj]);
             }
+            else
+            {
+                actionOrder.Add(null);
+            }
 
             if (peekParams.ContainsKey(gObj))
             {
                 passiveOrder.Add(peekParams[gObj]);
             }
+            else
+            {
+                passiveOrder.Add(null);
+            }
         }
+        
 
         foreach (List<List<Object>> objects in actionOrder)
         {
-            // First action's message has move description.
-            GameObject casterObj = (GameObject)(objects[0][0]);
+            //// First action's message has move description.
+            //GameObject casterObj = (GameObject)(objects[0][0]);
 
-            if (casterObj.activeSelf)
-            {
+            //if (casterObj.activeSelf)
+            //{
                 Action action = (Action)objects[0][2];
 
                 sentences.Add(action.message);
-            }
+            //}
         }
 
 
@@ -134,7 +146,7 @@ public class AutoDialogue : MonoBehaviour
 
     public void DisplayNextSentence()
     {
-        // TODO: End fight after all enemies defeated.
+        //// TODO: End fight after all enemies defeated.
         //bool foundEnabled = false;
         //foreach (GameObject enemies in battleManager.enemies)
         //{
@@ -144,9 +156,19 @@ public class AutoDialogue : MonoBehaviour
         //    }
         //}
 
+        //if (!foundEnabled && sentences.Count <= actionOrder[0].Count + passiveOrder[0].Count)
+        //{
+        //    EndDialogue();
+        //}
+        //Debug.Log("-----");
+        //Debug.Log("sentences" + sentences.Count);
+        //Debug.Log("bonus" + bonusSentences.Count);
+        //Debug.Log("actionparams" + actionOrder.Count);
+        //Debug.Log("passiveorder" + passiveOrder.Count);
+        //Debug.Log("-----");
 
 
-        if (sentences.Count > 0)
+        if (sentences.Count > 0 && bonusSentences.Count <= 0)
         {
             if (!coroutineRunning)
             {
@@ -177,16 +199,26 @@ public class AutoDialogue : MonoBehaviour
 
                 if (actionOrder.Count > 0)
                 {
-                    List<List<Object>> objectsList = actionOrder[0];
+                    //List<List<Object>> objectsList = actionOrder[0];
 
-                    foreach (List<Object> objects in objectsList)
+                    //foreach (List<Object> objects in objectsList)
+                    //{
+                    //GameObject casterObj = (GameObject)objects[0];
+                    //if (casterObj.activeSelf)
+                    //{
+
+                    GameObject casterObj = (GameObject)actionOrder[0][0][0];
+                    if (casterObj.activeSelf)
                     {
-                        GameObject casterObj = (GameObject)objects[0];
-                        if (casterObj.activeSelf)
-                        {
-                            sentence = sentences[0];
-                        }
+                        sentence = sentences[0];
                     }
+                        //}
+                        //else
+                        //{
+                        //    actionOrder.RemoveAt(0);
+                        //    passiveOrder.RemoveAt(0);
+                        //}
+                    //}
                 }
                 else
                 {
@@ -197,6 +229,7 @@ public class AutoDialogue : MonoBehaviour
                 }
 
                 sentences.RemoveAt(0);
+
 
                 //Debug.Log(sentence);
                 StopAllCoroutines();
@@ -210,10 +243,44 @@ public class AutoDialogue : MonoBehaviour
                 StopAllCoroutines();
                 coroutineRunning = false;
             }
+        } else if (bonusSentences.Count > 0)
+        {
+            //Debug.Log("BA" + bonusSentences.Count);
+            string sentence = bonusSentences[0];
+            bonusSentences.RemoveAt(0);
+            StopAllCoroutines();
+            StartCoroutine(TypeSentence(sentence));
         }
         else
         {
-            EndDialogue();
+            foreach (GameObject player in battleManager.players)
+            {
+                if (player.activeSelf)
+                {
+                    player.GetComponent<CharacterStats>().TurnOver();
+                }
+            }
+
+            foreach (GameObject enemy in battleManager.enemies)
+            {
+                if (enemy.activeSelf)
+                {
+                    enemy.GetComponent<CharacterStats>().TurnOver();
+                }
+            }
+
+            if (bonusSentences.Count > 0)
+            {
+                //Debug.Log("BA" + bonusSentences.Count);
+                string sentence = bonusSentences[0];
+                bonusSentences.RemoveAt(0);
+                StopAllCoroutines();
+                StartCoroutine(TypeSentence(sentence));
+            }
+            else
+            {
+                EndDialogue();
+            }
         }
 
     }
@@ -224,12 +291,20 @@ public class AutoDialogue : MonoBehaviour
         {
             dialogueText.text = "<mspace=1em>";
             currentSentence = sentence;
+            Debug.Log(currentSentence);
             coroutineRunning = true;
+            currentChar = 0;
+            currentLine = 0;
             foreach (char letter in sentence.ToCharArray())
             {
-                dialogueText.text += letter;
+                if (letter != '&' && letter != '%')
+                {
+                    dialogueText.text += letter;
+                }
                 if (letter == ' ')
                 {
+                    //Debug.Log(currentChar);
+
                     string subStr = sentence.Substring(currentChar + 1);
                     lineOffset = 0;
                     bool escape = false;
@@ -247,9 +322,24 @@ public class AutoDialogue : MonoBehaviour
                                 currentLine = -1;
                                 escape = true;
                             }
-                            lineOffset++;
+                            if (letter != '&' && letter != '%')
+                            {
+                                lineOffset++;
+                            }
                         }
                     }
+                }
+
+                if (letter == '&')
+                {
+                    yield return new WaitForSeconds(timeDelay);
+                    currentLine -= 1;
+
+                }
+                if (letter == '%')
+                {
+                    dialogueText.text += '\n';
+                    currentLine = -1;
                 }
                 currentChar++;
                 currentLine++;
@@ -257,25 +347,49 @@ public class AutoDialogue : MonoBehaviour
             }
             coroutineRunning = false;
             yield return new WaitForSeconds((timeDelay * messagePause));
-            if (sentences.Count < actionOrder.Count)
+            if (bonusSentences.Count <= 0 && sentences.Count < actionOrder.Count)
             {
                 if (actionOrder.Count > 0)
                 {
                     List<List<Object>> objectsList = actionOrder[0];
                     actionOrder.RemoveAt(0);
 
-                    foreach (List<Object> objects in objectsList)
+                    if (objectsList != null)
                     {
-                        GameObject casterObj = (GameObject)objects[0];
-                        GameObject targetObj = (GameObject)objects[1];
-
-
-                        CharacterStats casterStats = casterObj.GetComponent<CharacterStats>();
-                        CharacterStats targetStats = targetObj.GetComponent<CharacterStats>();
-                        Action action = (Action)objects[2];
-                        if (casterObj.activeSelf)
+                        foreach (List<Object> objects in objectsList)
                         {
-                            action.Perform(casterStats, targetStats);
+                            GameObject casterObj = (GameObject)objects[0];
+                            GameObject targetObj = (GameObject)objects[1];
+
+
+                            CharacterStats casterStats = casterObj.GetComponent<CharacterStats>();
+                            CharacterStats targetStats = targetObj.GetComponent<CharacterStats>();
+                            Action action = (Action)objects[2];
+
+                            int deathCount = 0;
+                            foreach (GameObject player in battleManager.players)
+                            {
+                                if (!player.activeSelf)
+                                {
+                                    deathCount++;
+                                }
+                            }
+
+                            if (casterObj.activeSelf)
+                            {
+                                if (battleManager.players.Contains(casterObj))
+                                {
+                                    battleManager.healthBlocks[battleManager.players.IndexOf(casterObj)].GetComponent<Animator>().SetInteger("State", 0);
+                                }
+                                action.Perform(casterStats, targetStats);
+
+                                foreach (GameObject player in battleManager.players)
+                                {
+                                    CharacterStats currStats = player.GetComponent<CharacterStats>();
+                                    battleManager.healthBlocks[battleManager.players.IndexOf(player)].transform.GetChild(0).GetChild(1).GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>().SetText(currStats.characterName + "\n" + currStats.currentHealth + "/" + currStats.maxHealth.GetValue());
+                                }
+
+                            }
                         }
                     }
                 }
@@ -285,27 +399,64 @@ public class AutoDialogue : MonoBehaviour
                     List<List<Object>> objectsList = passiveOrder[0];
                     passiveOrder.RemoveAt(0);
 
-                    foreach (List<Object> objects in objectsList)
+                    if (objectsList != null)
                     {
-                        GameObject casterObj = (GameObject)objects[0];
-                        GameObject targetObj = (GameObject)objects[1];
+
+                        foreach (List<Object> objects in objectsList)
+                        {
+                            GameObject casterObj = (GameObject)objects[0];
+                            GameObject targetObj = (GameObject)objects[1];
 
 
-                        CharacterStats casterStats = casterObj.GetComponent<CharacterStats>();
-                        CharacterStats targetStats = targetObj.GetComponent<CharacterStats>();
-                        Action action = (Action)objects[2];
-                        Debug.Log("TESTING!");
-                        action.PerformPassive(casterStats, targetStats);
+                            CharacterStats casterStats = casterObj.GetComponent<CharacterStats>();
+                            CharacterStats targetStats = targetObj.GetComponent<CharacterStats>();
+                            Action action = (Action)objects[2];
+                            //Debug.Log("TESTING!");
+                            action.PerformPassive(casterStats, targetStats);
+
+                            foreach (GameObject player in battleManager.players)
+                            {
+                                CharacterStats currStats = player.GetComponent<CharacterStats>();
+
+                                battleManager.healthBlocks[battleManager.players.IndexOf(player)].transform.GetChild(0).GetChild(1).GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>().SetText(currStats.characterName + "\n" + currStats.currentHealth + "/" + currStats.maxHealth.GetValue());
+                            }
+                        }
                     }
                 }
             }
         }
+        else
+        {
+            if (actionOrder.Count > 0)
+            {
+                actionOrder.RemoveAt(0);
+            }
+            if (passiveOrder.Count> 0)
+            {
+                passiveOrder.RemoveAt(0);
+            }
+        }
+
+
+        RecheckActive();
+
+
+        //Debug.Log(actionOrder.Count);
+        //Debug.Log(passiveOrder.Count);
+        //Debug.Log(sentences.Count);
+        //Debug.Log("");
 
         DisplayNextSentence();
     }
 
     public void EndDialogue()
     {
+        
+         
+
+
+
+        
         //Debug.Log("End of Conversation");
         //animator.SetBool("IsOpen", false);
         //rb.constraints = RigidbodyConstraints2D.FreezeRotation;
@@ -326,6 +477,36 @@ public class AutoDialogue : MonoBehaviour
 
     }
 
+    void RecheckActive ()
+    {
+        if (sentences.Count == actionOrder.Count && sentences.Count == passiveOrder.Count)
+        {
+            for (int i = 0; i < actionOrder.Count; i++)
+            {
+                GameObject casterObject = (GameObject)actionOrder[i][0][0];
+
+                if (!casterObject.activeSelf)
+                {
+                    actionOrder.RemoveAt(i);
+                    passiveOrder.RemoveAt(i);
+                    sentences.RemoveAt(i);
+                }
+            }
+        }
+
+        if (sentences.Count > actionOrder.Count)
+        {
+            for (int i = 0; i < actionOrder.Count; i++)
+            {
+                GameObject casterObject = (GameObject)actionOrder[i][0][0];
+
+                if (!casterObject.activeSelf)
+                {
+                    sentences.RemoveAt(i + (sentences.Count-actionOrder.Count));
+                }
+            }
+        }
+    }
 
     void Update()
     {
@@ -342,5 +523,10 @@ public class AutoDialogue : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void MessageMe (string sentenceAdd)
+    {
+        bonusSentences.Add(sentenceAdd);
     }
 }

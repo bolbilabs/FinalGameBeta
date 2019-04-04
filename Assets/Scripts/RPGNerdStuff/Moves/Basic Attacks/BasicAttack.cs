@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 public class BasicAttack : Action
 {
     public int baseDamage = 20;
+    public int subDamage = 20;
 
 
     public override int Peek(CharacterStats player, CharacterStats target)
@@ -15,7 +16,15 @@ public class BasicAttack : Action
         // Displays if attack is lethal to anyone.
         if (target != null)
         {
-            return player.PeekAttackTarget(target, baseDamage, false);
+            if (target.GetType() == typeof(PlayerStats))
+            {
+                return player.PeekAttackTarget(target, subDamage, false);
+
+            }
+            else
+            {
+                return player.PeekAttackTarget(target, baseDamage, false);
+            }
         }
         else
         {
@@ -35,7 +44,15 @@ public class BasicAttack : Action
     {
         if (player != null && target != null)
         {
-            player.AttackTarget(target, baseDamage, false);
+            if (target.GetType() == typeof(PlayerStats))
+            {
+                player.AttackTarget(target, subDamage, false);
+            }
+            else
+            {
+                player.AttackTarget(target, baseDamage, false);
+
+            }
         }
     }
 }

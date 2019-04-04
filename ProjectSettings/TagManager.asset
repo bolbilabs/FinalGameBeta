@@ -5,6 +5,9 @@ TagManager:
   serializedVersion: 2
   tags:
   - Enemy
+  - BattleManager
+  - HealthBlock
+  - Dials
   layers:
   - Default
   - TransparentFX

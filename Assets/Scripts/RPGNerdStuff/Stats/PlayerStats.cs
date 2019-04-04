@@ -18,6 +18,12 @@ public class PlayerStats : CharacterStats
     public int hope;
 
 
+    public Sprite bodySprite;
+
+
+    public PlayerStats rich;
+
+
     // Use this for initialization
     public override void Awake()
     {
@@ -37,41 +43,64 @@ public class PlayerStats : CharacterStats
     // Damage the character
     public override void TakeDamage(int damage, bool ignoreDefense)
     {
-        // Subtract the armor value - Make sure damage doesn't go below 0.
-        if (!ignoreDefense)
+        if (!isGuarded && !isPermahealed)
         {
-            damage -= defense.GetValue();
-            damage = Mathf.Clamp(damage, 0, int.MaxValue);
-        }
+            // Subtract the armor value - Make sure damage doesn't go below 0.
+            if (!ignoreDefense)
+            {
+                damage -= defense.GetValue();
+                damage = Mathf.Clamp(damage, 0, int.MaxValue);
+            }
 
-        // Subtract damage from health
-        currentHealth -= damage;
-        Debug.Log(transform.name + " takes " + damage + " damage.");
+            // Subtract damage from health
+            currentHealth -= damage;
+            Debug.Log(transform.name + " takes " + damage + " damage.");
 
-
-        //if (autoDialogue.sentences.Count >= autoDialogue.actionOrder.Count)
-        //{
-            autoDialogue.sentences.Insert((autoDialogue.sentences.Count - autoDialogue.actionOrder.Count), characterName + " takes " + damage + " damage!");
-
-        //}
-        //else
-        //{
-        //    autoDialogue.sentences.Insert(0, characterName + " takes " + damage + " damage!");
-        //}
-
-
-        // TODO: If we hit 0. Die. Death status condition?
-        if (currentHealth <= 0)
-        {
-            this.gameObject.SetActive(false);
 
             //if (autoDialogue.sentences.Count >= autoDialogue.actionOrder.Count)
             //{
+            autoDialogue.MessageMe(characterName + " takes " + damage + " damage!");
 
-                autoDialogue.sentences.Insert((autoDialogue.sentences.Count - autoDialogue.actionOrder.Count), "Placeholder for character death.");
+            //}
+            //else
+            //{
+            //    autoDialogue.sentences.Insert(0, characterName + " takes " + damage + " damage!");
             //}
 
+
+            // TODO: If we hit 0. Die. Death status condition?
+            if (currentHealth <= 0)
+            {
+                this.gameObject.SetActive(false);
+
+                //if (autoDialogue.sentences.Count >= autoDialogue.actionOrder.Count)
+                //{
+
+                autoDialogue.MessageMe("Placeholder for character death.");
+                BattleManager.GetInstance().deathparam++;
+
+                //BattleManager.GetInstance().healthBlocks.RemoveAt(BattleManager.GetInstance().currentPlayer);
+
+                if (BattleManager.GetInstance().players.Contains(this.gameObject))
+                {
+                    BattleManager.GetInstance().healthBlocks[BattleManager.GetInstance().players.IndexOf(this.gameObject)].GetComponent<Animator>().SetInteger("State", 0);
+                }
+
+                //}
+            }
         }
+        else if (isGuarded)
+        {
+            //Youch!
+            autoDialogue.MessageMe("In a sudden act of selflessness&.&.&.&&& Rich blocks the attack from hitting " + characterName + "!");
+            rich.TakeDamage(99999, true);
+            isGuarded = false;
+        } else if (isPermahealed)
+        {
+            // Immunity.
+            autoDialogue.MessageMe("&&&.&.&.&&&%Luna's leftover light prevents the attack from damaging " + characterName + ".");
+        }
+
     }
 
 
@@ -90,9 +119,12 @@ public class PlayerStats : CharacterStats
         else
         {
             Debug.Log("Attack misses!");
-            autoDialogue.sentences.Insert(0, "But it totally missed!");
+            autoDialogue.MessageMe("But it totally missed!");
             AdjustHope(this, -hopeFlux * 2);
+
         }
+
+
     }
 
     // Checks to see what the health of the target will be.
@@ -134,16 +166,37 @@ public class PlayerStats : CharacterStats
     {
         if (target != null)
         {
-            currentHealth += amount;
+            target.currentHealth += amount;
             currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth.GetValue());
+            autoDialogue.MessageMe(target.characterName + " receives " + amount + " health!");
         }
         else
         {
             Debug.Log("No matter how hard you try, you can never bring 'em back...");
-            autoDialogue.sentences.Insert(0, "No matter how hard you try, you can never bring 'em back...");
+            autoDialogue.MessageMe("No matter how hard you try, you can never bring 'em back...");
 
             AdjustHope(this, -hopeFlux * 4);
         }
+    }
+
+    // Peek Heal the target.
+    public override int PeekHeal(CharacterStats target, int amount)
+    {
+        // Subtract the armor value - Make sure damage doesn't go below 0.
+        amount += attack.GetValue() + (int)(Mathf.Clamp(hope * 0.1f, 0, int.MaxValue));
+        amount = Mathf.Clamp(amount, 0, int.MaxValue);
+
+        // Subtract damage from health
+        Debug.Log(transform.name + " will have " + (currentPeekDamage + amount) + " health.");
+
+        //if (currentHealth - damage <= 0)
+        //{
+        //    Debug.Log(transform.name + " is in peril!");
+        //}
+
+        currentPeekDamage += amount;
+
+        return currentPeekDamage;
     }
 
     public void AdjustHope(PlayerStats target, int value)
@@ -151,6 +204,60 @@ public class PlayerStats : CharacterStats
         target.hope += value;
     }
 
+    public override void GuardOn()
+    {
+        autoDialogue.MessageMe("Rich appears concerned.&&&% He stares pensively at " + characterName + "...");
+        isGuarded = true;
+    }
+
+    public override void PermahealOn()
+    {
+        autoDialogue.MessageMe("Luna glows brilliantly&.&.&.&&& Suddenly, a bright light shrouds " + characterName + ".");
+        isPermahealed = true;
+    }
+
+
+    public override void RoryOn(CharacterStats roryStats)
+    {
+        // Player Dialogue.
+        autoDialogue.MessageMe("He-HEY.");
+        autoDialogue.MessageMe("You can't hurt my friends any longer... Yeah. That's right!");
+        autoDialogue.MessageMe("I won't let you! You hear?");
+
+        if (!isRoared)
+        {
+            if (rich.gameObject.activeSelf)
+            {
+                autoDialogue.MessageMe("Rich was taken aback by Rory's newfound demeanor.");
+                autoDialogue.MessageMe("Rory?&&&% Is that even you?");
+                autoDialogue.MessageMe("Rory leered fiercely at Rich.");
+            }
+            //
+            isRoared = true;
+        }
+
+        autoDialogue.MessageMe("Thank you for showing me how to be brave, Rich. This one's for you.");
+
+        autoDialogue.MessageMe("Rory expelled a battlecry as he slowly approached his enemy.");
+        autoDialogue.MessageMe("His eyes were of that of a lion's, waiting to claim its pray.");
+        autoDialogue.MessageMe("Bright. Brave. He found a fire inside of him that burned hotter than a Luchacabra's muscles.");
+        autoDialogue.MessageMe("Pure fear inundated the enemy line.");
+    }
+
+    public override void TurnOver()
+    {
+        if (isGuarded)
+        {
+            autoDialogue.MessageMe(characterName + " notices Rich staring. Rich conspicuously looks the other way and whistles.");
+            isGuarded = false;
+        }
+
+        if (isPermahealed)
+        {
+            autoDialogue.MessageMe("The last of Luna's light...&&&&&% has faded.");
+            isPermahealed = false;
+        }
+    }
 
 
 }
