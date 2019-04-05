@@ -8,6 +8,7 @@ TagManager:
   - BattleManager
   - HealthBlock
   - Dials
+  - Players
   layers:
   - Default
   - TransparentFX
