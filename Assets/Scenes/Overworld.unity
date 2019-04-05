@@ -2782,7 +2782,7 @@ GameObject:
   - component: {fileID: 162915995}
   - component: {fileID: 162915993}
   m_Layer: 0
-  m_Name: Rich
+  m_Name: Follower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2884,7 +2884,7 @@ GameObject:
   - component: {fileID: 233565643}
   - component: {fileID: 233565644}
   m_Layer: 0
-  m_Name: Paul
+  m_Name: Leader
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2903,6 +2903,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 300
+  anim: {fileID: 0}
 --- !u!212 &233565640
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -3527,7 +3528,7 @@ GameObject:
   - component: {fileID: 1301355266}
   - component: {fileID: 1301355264}
   m_Layer: 0
-  m_Name: Rory
+  m_Name: Follower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3744,7 +3745,7 @@ GameObject:
   - component: {fileID: 2001574624}
   - component: {fileID: 2001574622}
   m_Layer: 0
-  m_Name: Luna
+  m_Name: Follower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

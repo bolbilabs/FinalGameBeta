@@ -24,7 +24,10 @@ public class PlayerLine : MonoBehaviour
         {
             for (int i = 1; i < transform.childCount; i++)
             {
-                followers.Add(transform.GetChild(i).gameObject);
+                if (transform.GetChild(i).gameObject.activeSelf)
+                {
+                    followers.Add(transform.GetChild(i).gameObject);
+                }
             }
         }
 
@@ -37,9 +40,21 @@ public class PlayerLine : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+
+        //if (!leader.activeSelf)
+        //{
+        //    foreach (GameObject follower in followers)
+        //    {
+        //        if (follower.activeSelf)
+        //        {
+        //            leader = follower;
+        //            followers.RemoveAt(followers.IndexOf(follower));
+        //        }
+        //    }
+        //}
+
+
         Animator currentAnim = leader.GetComponent<PlayerMovements>().anim;
-
-
 
         if (animList.Count < 1 || Vector3.Distance(leader.transform.position, animList[animList.Count - 1].position) > 0.5f)
         {
@@ -48,6 +63,10 @@ public class PlayerLine : MonoBehaviour
 
             for (int i = 0; i < followers.Count; i++)
             {
+                if (!followers[i].activeSelf)
+                {
+                    followers.RemoveAt(i);
+                }
                 if (animList.Count > spacingSize + (spacingSize * i))
                 {
                     AnimObject currentAnimObj = animList[animList.Count - (spacingSize + spacingSize * i)];
