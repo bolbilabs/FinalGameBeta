@@ -15,6 +15,19 @@ public class PlayerLine : MonoBehaviour
 
     public int spacingSize = 4;
 
+    void Awake()
+    {
+        GameObject gameController = GameObject.FindWithTag("GameController");
+
+        for (int i = 0; i < gameController.transform.childCount; i++)
+        {
+            if (!gameController.transform.GetChild(i).gameObject.activeSelf)
+            {
+                transform.GetChild(transform.childCount - 1).gameObject.SetActive(false);
+            }
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {

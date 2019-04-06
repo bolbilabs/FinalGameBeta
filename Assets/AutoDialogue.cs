@@ -43,6 +43,7 @@ public class AutoDialogue : MonoBehaviour
     private int currentChar = 0;
 
 
+
     // List of characters, list of actions, list of triple objects
     public List<List<List<Object>>> actionOrder = new List<List<List<Object>>>();
     public List<List<List<Object>>> passiveOrder = new List<List<List<Object>>>();
@@ -74,6 +75,7 @@ public class AutoDialogue : MonoBehaviour
         currentChar = 0;
 
         lineOffset = 0;
+
 
         //sentences = new List<string>();
         //images = new Queue<Sprite>();
@@ -172,68 +174,91 @@ public class AutoDialogue : MonoBehaviour
         {
             if (!coroutineRunning)
             {
-                //if (sentences.Count == 0)
-                //{
-                //    EndDialogue();
-                //    return;
-                //}
-
-
-                //if (images.Peek() != null)
-                //{
-                //    image.sprite = images.Dequeue();
-                //}
-                //else
-                //{
-                //    images.Dequeue();
-                //}
-                currentLine = 0;
-
-                currentChar = 0;
-
-                lineOffset = 0;
-                //string sentence = sentences.Dequeue();
-
                 string sentence = null;
 
+           
 
-                if (actionOrder.Count > 0)
-                {
-                    //List<List<Object>> objectsList = actionOrder[0];
-
-                    //foreach (List<Object> objects in objectsList)
+                    //if (sentences.Count == 0)
                     //{
-                    //GameObject casterObj = (GameObject)objects[0];
-                    //if (casterObj.activeSelf)
-                    //{
+                    //    EndDialogue();
+                    //    return;
+                    //}
 
-                    GameObject casterObj = (GameObject)actionOrder[0][0][0];
-                    if (casterObj.activeSelf)
+
+                    //if (images.Peek() != null)
+                    //{
+                    //    image.sprite = images.Dequeue();
+                    //}
+                    //else
+                    //{
+                    //    images.Dequeue();
+                    //}
+                    currentLine = 0;
+
+                    currentChar = 0;
+
+                    lineOffset = 0;
+                    //string sentence = sentences.Dequeue();
+
+
+
+                    if (actionOrder.Count > 0)
                     {
-                        sentence = sentences[0];
-                    }
+                        //List<List<Object>> objectsList = actionOrder[0];
+
+                        //foreach (List<Object> objects in objectsList)
+                        //{
+                        //GameObject casterObj = (GameObject)objects[0];
+                        //if (casterObj.activeSelf)
+                        //{
+
+                        GameObject casterObj = (GameObject)actionOrder[0][0][0];
+                        if (casterObj.activeSelf)
+                        {
+                            sentence = sentences[0];
+                        }
                         //}
                         //else
                         //{
                         //    actionOrder.RemoveAt(0);
                         //    passiveOrder.RemoveAt(0);
                         //}
-                    //}
+                        //}
+                    }
+                    else
+                    {
+                        if (sentences.Count > 0)
+                        {
+                            sentence = sentences[0];
+                        }
+                    }
+
+                    sentences.RemoveAt(0);
+
+
+
+            
+
+                bool foundActiveEnemy = false;
+                foreach (GameObject checkEnemy in BattleManager.GetInstance().enemies)
+                {
+                    if (checkEnemy.activeSelf)
+                    {
+                        foundActiveEnemy = true;
+                    }
+                }
+                if (foundActiveEnemy)
+                {
+                    //Debug.Log(sentence);
+                    StopAllCoroutines();
+                    StartCoroutine(TypeSentence(sentence));
                 }
                 else
                 {
-                    if (sentences.Count > 0)
-                    {
-                        sentence = sentences[0];
-                    }
+                    //MessageMe("&&&Y&&&O&&&U&&& &&&W&&&I&&&N&&&!&&&!&&&!&&&");
+                    StopAllCoroutines();
+                    StartCoroutine(TypeSentence("&&&Y&&&O&&&U&&& &&&W&&&I&&&N&&&!&&&!&&&!&&&&&&&@"));
                 }
-
-                sentences.RemoveAt(0);
-
-
-                //Debug.Log(sentence);
-                StopAllCoroutines();
-                StartCoroutine(TypeSentence(sentence));
 
 
             }
@@ -279,7 +304,26 @@ public class AutoDialogue : MonoBehaviour
             }
             else
             {
-                EndDialogue();
+                bool foundActiveEnemy = false;
+                foreach (GameObject checkEnemy in BattleManager.GetInstance().enemies)
+                {
+                    if (checkEnemy.activeSelf)
+                    {
+                        foundActiveEnemy = true;
+                    }
+                }
+
+
+                if (!foundActiveEnemy)
+                {
+                    //MessageMe("&&&Y&&&O&&&U&&& &&&W&&&I&&&N&&&!&&&!&&&!&&&");
+                    StopAllCoroutines();
+                    StartCoroutine(TypeSentence("&&&Y&&&O&&&U&&& &&&W&&&I&&&N&&&!&&&!&&&!&&&&&&&@"));
+                }
+                else
+                {
+                    EndDialogue();
+                }
             }
         }
 
@@ -297,7 +341,7 @@ public class AutoDialogue : MonoBehaviour
             currentLine = 0;
             foreach (char letter in sentence.ToCharArray())
             {
-                if (letter != '&' && letter != '%')
+                if (letter != '&' && letter != '%' && letter != '@')
                 {
                     dialogueText.text += letter;
                 }
@@ -340,6 +384,10 @@ public class AutoDialogue : MonoBehaviour
                 {
                     dialogueText.text += '\n';
                     currentLine = -1;
+                }
+                if (letter == '@')
+                {
+                    GameControl.EndBattle();
                 }
                 currentChar++;
                 currentLine++;

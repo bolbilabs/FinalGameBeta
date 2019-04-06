@@ -91,18 +91,22 @@ public class BattleManager : MonoBehaviour
     // This function is called to start battles.
     // The parameter here is for non-random encounters
     // Well, actually. Do we want to fight directly on map (could be stylish) or change scenes for battle?
-    public void Init (GameObject[] pregenEnemies)
+    public void Init ()
     {
-        if (pregenEnemies == null)
+        //players = GameObject.FindGameObjectsWithTag("Player");
+        //players = GameObject.FindGameObjectsWithTag("Enemy");
+
+
+        if (GameControl.enemies != null && GameControl.enemies.Count > 0)
         {
-            // Randomly generate enemies from a beautiful selection of prefabs
+            foreach (GameObject enemy in GameControl.enemies)
+            {
+                GameObject currentEnemy = Instantiate(enemy);
+                currentEnemy.transform.SetParent(GameObject.FindWithTag("Enemies").transform);
+                //enemies.Add(currentEnemy);
+            }
         }
-        else
-        { }
-
-            //players = GameObject.FindGameObjectsWithTag("Player");
-            //players = GameObject.FindGameObjectsWithTag("Enemy");
-
+        
     }
 
     public static BattleManager GetInstance()
@@ -118,6 +122,8 @@ public class BattleManager : MonoBehaviour
         }
 
         Screen.SetResolution(width, height, true, 60);
+
+        Init();
     }
 
     // Start is called before the first frame update
@@ -156,6 +162,8 @@ public class BattleManager : MonoBehaviour
         int offset = 0;
         foreach (GameObject player in players)
         {
+            //Debug.Log(player.name);
+
             if (player.activeSelf)
             {
                 foreach (int skipper in skipIndex)
@@ -165,6 +173,7 @@ public class BattleManager : MonoBehaviour
                         offset++;
                     }
                 }
+                //Debug.Log(i + offset);
                 GameObject.FindGameObjectWithTag("HealthBlock").transform.GetChild(i+offset).gameObject.SetActive(true);
                 healthBlocks.Add(GameObject.FindGameObjectWithTag("HealthBlock").transform.GetChild(i+offset).gameObject);
                 PlayerStats currStats = player.GetComponent<PlayerStats>();

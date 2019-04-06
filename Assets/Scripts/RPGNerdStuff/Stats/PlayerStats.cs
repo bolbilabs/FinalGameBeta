@@ -28,6 +28,7 @@ public class PlayerStats : CharacterStats
     public override void Awake()
     {
         base.Awake();
+
     }
 
     // Use this for initialization
@@ -38,7 +39,7 @@ public class PlayerStats : CharacterStats
 
         //EquipmentManager.instance.onEquipmentChanged += OnEquipmentChanged;
     }
-
+    
 
     // Damage the character
     public override void TakeDamage(int damage, bool ignoreDefense)
@@ -59,6 +60,8 @@ public class PlayerStats : CharacterStats
 
             //if (autoDialogue.sentences.Count >= autoDialogue.actionOrder.Count)
             //{
+            Debug.Log(autoDialogue);
+
             autoDialogue.MessageMe(characterName + " takes " + damage + " damage!");
 
             //}

@@ -9,6 +9,9 @@ TagManager:
   - HealthBlock
   - Dials
   - Players
+  - Enemies
+  - PlayerCollider
+  - MapEnemies
   layers:
   - Default
   - TransparentFX
@@ -18,7 +21,7 @@ TagManager:
   - UI
   - 
   - 
-  - 
+  - Players
   - 
   - 
   - 

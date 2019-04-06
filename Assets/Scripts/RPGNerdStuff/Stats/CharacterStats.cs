@@ -35,11 +35,23 @@ public class CharacterStats : MonoBehaviour
     public virtual void Awake()
     {
         currentHealth = maxHealth.GetValue();
+       
     }
 
     public virtual void Start()
     {
 
+    }
+
+    public void Update()
+    {
+        if (autoDialogue == null)
+        {
+            if (GameObject.FindGameObjectsWithTag("BattleManager").Length > 0)
+            {
+                autoDialogue = GameObject.FindWithTag("BattleManager").GetComponent<AutoDialogue>();
+            }
+        }
     }
 
     // Damage the character
