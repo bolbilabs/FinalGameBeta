@@ -26,7 +26,7 @@ public class CharacterStats : MonoBehaviour
     public CharacterStats rory;
 
     public string[] superlatives;
-
+    
     // TODO: Status Conditions
 
     //public event System.Action OnHealthReachedZero;
@@ -173,8 +173,8 @@ public class CharacterStats : MonoBehaviour
         if (target.gameObject.activeSelf)
         {
             target.currentHealth += amount;
-            currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth.GetValue());
-            autoDialogue.MessageMe(characterName + " gains " + amount + " health!");
+            target.currentHealth = Mathf.Clamp(target.currentHealth, 0, target.maxHealth.GetValue());
+            autoDialogue.MessageMe(target.characterName + " gains " + amount + " health!");
 
         }
         else
@@ -192,16 +192,18 @@ public class CharacterStats : MonoBehaviour
         amount = Mathf.Clamp(amount, 0, int.MaxValue);
 
         // Subtract damage from health
-        Debug.Log(transform.name + " will have " + (currentPeekDamage + amount) + " health.");
+        Debug.Log(target.characterName + " will have " + (target.currentPeekDamage + amount) + " health.");
 
         //if (currentHealth - damage <= 0)
         //{
         //    Debug.Log(transform.name + " is in peril!");
         //}
 
-        currentPeekDamage += amount;
+        target.currentPeekDamage += amount;
 
-        return currentPeekDamage;
+        target.currentPeekDamage = Mathf.Clamp(target.currentPeekDamage, 0, target.maxHealth.GetValue());
+
+        return target.currentPeekDamage;
     }
 
     public virtual void GuardOn()
@@ -217,6 +219,11 @@ public class CharacterStats : MonoBehaviour
         rory = roryStats;
         autoDialogue.MessageMe(characterName + " begins to fear Rory greatly.");
         isRoared = true;
+    }
+
+    public void RoryWhat()
+    {
+        autoDialogue.MessageMe(characterName + " begins to fear Rory even more.");
     }
 
     public virtual void TurnOver()

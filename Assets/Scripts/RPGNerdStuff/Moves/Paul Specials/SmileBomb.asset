@@ -26,5 +26,6 @@ MonoBehaviour:
   description: A self-sacrificing blast. Inflicts mortal damage to both target and
     user.
   message: Paul runs towards the enemy and clutches it tightly...
+  priority: 20
   enemyDamage: 99999
   selfDamage: 99999

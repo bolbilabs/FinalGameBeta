@@ -25,4 +25,5 @@ MonoBehaviour:
   onlyTargetsSelf: 0
   description: Rich sacrifices his life to protect a friend.
   message: 
+  priority: 10
   percentage: 50

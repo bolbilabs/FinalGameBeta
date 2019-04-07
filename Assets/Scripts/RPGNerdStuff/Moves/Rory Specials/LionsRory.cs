@@ -21,7 +21,7 @@ public class LionsRory : Action
 
     public override int PeekPassive(CharacterStats player, CharacterStats target)
     {
-        target.currentPeekDamage = target.currentHealth;
+        //target.currentPeekDamage = target.currentHealth;
         return target.currentHealth;
     }
 
@@ -32,14 +32,17 @@ public class LionsRory : Action
         // Displays if attack is lethal to anyone.
         if (target != null)
         {
-            // Displays if attack is lethal to anyone.
-            if (target != null)
+            if (!player.isRoared)
             {
-                if (!player.isRoared)
-                {
-                    player.RoryOn(player);
-                }
+                player.RoryOn(player);
+            }
+            if (!target.isRoared)
+            {
                 target.RoryOn(player);
+            }
+            else
+            {
+                player.RoryWhat();
             }
         }
     }

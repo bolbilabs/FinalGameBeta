@@ -12,6 +12,7 @@ TagManager:
   - Enemies
   - PlayerCollider
   - MapEnemies
+  - CharacterSit
   layers:
   - Default
   - TransparentFX

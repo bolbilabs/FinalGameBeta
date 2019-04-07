@@ -50,6 +50,9 @@ public class BattleManager : MonoBehaviour
     private List<GameObject> fightOrder;
 
     [SerializeField]
+    private List<int> priority;
+
+    [SerializeField]
     private List<Object> targetList;
 
     [SerializeField]
@@ -85,6 +88,8 @@ public class BattleManager : MonoBehaviour
     List<Action> possibleActions = new List<Action>();
 
     public List<GameObject> healthBlocks = new List<GameObject>();
+
+    public List<GameObject> characterSit = new List<GameObject>();
 
 
 
@@ -137,6 +142,9 @@ public class BattleManager : MonoBehaviour
         //currentTarget = 0;
         //menuState = 0;
 
+        targetList = new List<Object>();
+        peekList = new List<Object>();
+
         // Placeholder for prototype
         int skip = 0;
         foreach (GameObject player in players)
@@ -159,26 +167,39 @@ public class BattleManager : MonoBehaviour
         healthBlocks.Clear();
 
         int i = 0;
-        int offset = 0;
         foreach (GameObject player in players)
         {
-            //Debug.Log(player.name);
+            Debug.Log(player.name);
 
             if (player.activeSelf)
             {
-                foreach (int skipper in skipIndex)
+                int offset = 0;
+                //foreach (int skipper in skipIndex)
+                //{
+                //    if (i == skipper)
+                //    {
+                //        offset++;
+                //    }
+                //}
+                for (int j = 0; j < i+1; j++)
                 {
-                    if (i == skipper)
+                    if (skipIndex.Contains(j))
                     {
                         offset++;
                     }
                 }
-                //Debug.Log(i + offset);
-                GameObject.FindGameObjectWithTag("HealthBlock").transform.GetChild(i+offset).gameObject.SetActive(true);
-                healthBlocks.Add(GameObject.FindGameObjectWithTag("HealthBlock").transform.GetChild(i+offset).gameObject);
+
+
+                Debug.Log(i + offset);
+                GameObject.FindGameObjectWithTag("HealthBlock").transform.GetChild(players.IndexOf(player)).gameObject.SetActive(true);
+                healthBlocks.Add(GameObject.FindGameObjectWithTag("HealthBlock").transform.GetChild(players.IndexOf(player)).gameObject);
                 PlayerStats currStats = player.GetComponent<PlayerStats>();
-                healthBlocks[i].transform.GetChild(0).GetChild(1).GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>().SetText(currStats.characterName + "\n" + currStats.currentHealth + "/" + currStats.maxHealth.GetValue());
-                healthBlocks[i].transform.GetChild(0).GetChild(1).GetChild(0).GetChild(3).GetComponent<SpriteRenderer>().sprite = currStats.bodySprite;
+                healthBlocks[players.IndexOf(player)].transform.GetChild(0).GetChild(1).GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>().SetText(currStats.characterName + "\n" + currStats.currentHealth + "/" + currStats.maxHealth.GetValue());
+                healthBlocks[players.IndexOf(player)].transform.GetChild(0).GetChild(1).GetChild(0).GetChild(3).GetComponent<SpriteRenderer>().sprite = currStats.bodySprite;
+            }
+            else
+            {
+
             }
             i++;
         }
@@ -189,6 +210,13 @@ public class BattleManager : MonoBehaviour
 
         // Determines turn order based on speed
         fightOrder = fightOrder.OrderByDescending(o => o.GetComponent<CharacterStats>().speed.GetValue()).ToList();
+
+        foreach (GameObject orderObj in fightOrder)
+        {
+            priority.Add(0);
+        }
+
+
 
         actionParams = new Dictionary<GameObject, List<List<Object>>>();
         peekParams = new Dictionary<GameObject, List<List<Object>>>();
@@ -237,7 +265,9 @@ public class BattleManager : MonoBehaviour
             current.GetComponent<CharacterStats>().currentPeekDamage = current.GetComponent<CharacterStats>().currentHealth;
         }
 
+        characterSit.Clear();
 
+        characterSit.AddRange(GameObject.FindGameObjectsWithTag("CharacterSit"));
 
         goToTopMenu();
     }
@@ -354,9 +384,10 @@ public class BattleManager : MonoBehaviour
                 skipSub = true;
                 chosenAction = players[currentPlayer].GetComponent<PlayerController>().basicAttack;
                 goToTargetMenu();
-            } else if (currentTopAction == 1)
+            } else if (currentTopAction == 1 || currentTopAction == 2)
             {
                 skipSub = false;
+                currentSubAction = 0;
                 goToSubMenu();
             }
         }
@@ -365,6 +396,8 @@ public class BattleManager : MonoBehaviour
             {
                 actionParams[players[currentPlayer-1]] = new List<List<Object>>();
                 peekParams[players[currentPlayer -1]] = new List<List<Object>>();
+                targetList = new List<Object>();
+                peekList = new List<Object>();
                 currentPlayer--;
                 healthBarAnim.SetInteger("State", 0);
                 goToTopMenu();
@@ -526,10 +559,14 @@ public class BattleManager : MonoBehaviour
 
                     Action checkAction = ((Action)(actionParams[players[currentPlayer]][0][2]));
 
+                    priority[fightOrder.IndexOf(players[currentPlayer])] = checkAction.priority;
+
                     Debug.Log("Locked in " + checkAction.moveName + "!");
 
                     if (currentPlayer < players.Count() - 1)
                     {
+                        targetList = new List<Object>();
+                        peekList = new List<Object>();
                         currentPlayer++;
                         goToTopMenu();
                     }
@@ -548,6 +585,13 @@ public class BattleManager : MonoBehaviour
                             targetY.GetComponent<SpriteRenderer>().color = color;
                         }
 
+                        foreach (GameObject thisCharacter in characterSit)
+                        {
+                            Color color = thisCharacter.GetComponent<SpriteRenderer>().color;
+                            color.r = 255; color.g = 255; color.b = 255;
+                            thisCharacter.GetComponent<SpriteRenderer>().color = color;
+                        }
+
                         goToExecuteActions();
 
                     }
@@ -563,17 +607,19 @@ public class BattleManager : MonoBehaviour
 
                 if (skipSub)
                 {
-                    goToTopMenu();
                     actionParams[players[currentPlayer]] = new List<List<Object>>();
                     peekParams[players[currentPlayer]] = new List<List<Object>>();
-
+                    targetList = new List<Object>();
+                    peekList = new List<Object>();
+                    goToTopMenu();
                 }
                 else
                 {
-                    goToSubMenu();
                     actionParams[players[currentPlayer]] = new List<List<Object>>();
                     peekParams[players[currentPlayer]] = new List<List<Object>>();
-
+                    targetList = new List<Object>();
+                    peekList = new List<Object>();
+                    goToSubMenu();
                 }
             }
             else if (Input.GetKeyDown("down"))
@@ -698,11 +744,17 @@ public class BattleManager : MonoBehaviour
 
         skipSub = false;
         menuState = 1;
-        currentSubAction = 0;
-
-        possibleActions.Clear();
-        possibleActions.AddRange(players[currentPlayer].GetComponent<PlayerController>().specialAttack);
+        //currentSubAction = 0;
         
+        possibleActions.Clear();
+        if (currentTopAction == 1)
+        {
+            possibleActions.AddRange(players[currentPlayer].GetComponent<PlayerController>().specialAttack);
+        } else if (currentTopAction == 2)
+        {
+            possibleActions.AddRange(players[currentPlayer].GetComponent<PlayerController>().assist);
+        }
+
 
         UpdateUI();
 
@@ -804,6 +856,13 @@ public class BattleManager : MonoBehaviour
             targetY.GetComponent<SpriteRenderer>().color = color;
         }
 
+        foreach (GameObject thisCharacter in characterSit)
+        {
+            Color color = thisCharacter.GetComponent<SpriteRenderer>().color;
+            color.r = 255; color.g = 255; color.b = 255;
+            thisCharacter.GetComponent<SpriteRenderer>().color = color;
+        }
+
         if (menuState == 0)
         {
             if (currentTopAction == 0)
@@ -854,126 +913,193 @@ public class BattleManager : MonoBehaviour
                 targetY.GetComponent<SpriteRenderer>().color = color;
 
             }
+            //int i = 0;
+            //foreach (GameObject thisCharacter in characterSit)
+            //{
 
+            //    //int pants = skipIndex[i];
 
-            // Check total peek damage
+            //    int offset = 0;
+            //    //foreach (int skipper in skipIndex)
+            //    //{
+            //    //    if (i == skipper)
+            //    //    {
+            //    //        offset++;
+            //    //    }
+            //    //}
+            //    for (int j = 0; j < i + 1; j++)
+            //    {
+            //        if (skipIndex.Contains(j))
+            //        {
+            //            offset++;
+            //        }
+            //    }
 
-            foreach (GameObject current in fightOrder)
+            //    Color color = thisCharacter.GetComponent<SpriteRenderer>().color;
+            //    if (!targetList.Contains(players[i+offset]) && !peekList.Contains(players[i+offset]))
+            //    {
+            //        color.r = 0; color.g = 0; color.b = 0;
+            //    }
+            //    else
+            //    {
+            //        color.r = 0; color.g = 255; color.b = 0;
+            //    }
+            //    thisCharacter.GetComponent<SpriteRenderer>().color = color;
+            //    i++;
+            //}
+
+            foreach (GameObject player in players)
             {
-                current.GetComponent<CharacterStats>().currentPeekDamage = current.GetComponent<CharacterStats>().currentHealth;
-            }
-
-            // FOR ENEMY ATTACKS
-
-
-
-
-            // OTHER PLAYER ATTACKS
-            if (actionParams.Values.ToList().Any())
-            {
-                foreach (List<List<Object>> listObjects in actionParams.Values.ToList())
+                if (player.activeSelf)
                 {
-                    foreach (List<Object> objects in listObjects)
+                    GameObject thisCharacter = characterSit[players.IndexOf(player)];
+                    Color color = thisCharacter.GetComponent<SpriteRenderer>().color;
+                    if (!targetList.Contains(player) && !peekList.Contains(player))
                     {
-                        GameObject casterObj = (GameObject) objects[0];
-                        GameObject targetObj = (GameObject)objects[1];
-
-
-                        CharacterStats casterStats = casterObj.GetComponent<CharacterStats>();
-                        CharacterStats targetStats = targetObj.GetComponent<CharacterStats>();
-                        Action action = (Action)objects[2];
-
-                        action.Peek(casterStats, targetStats);
+                        color.r = 0; color.g = 0; color.b = 0;
                     }
-                }
-            }
-
-
-            if (peekParams.Values.ToList().Any())
-            {
-                foreach (List<List<Object>> listObjects in peekParams.Values.ToList())
-                {
-                    foreach (List<Object> objects in listObjects)
+                    else
                     {
-                        GameObject casterObj = (GameObject)objects[0];
-                        GameObject targetObj = (GameObject)objects[1];
-
-
-                        CharacterStats casterStats = casterObj.GetComponent<CharacterStats>();
-                        CharacterStats targetStats = targetObj.GetComponent<CharacterStats>();
-                        Action action = (Action)objects[2];
-
-                        action.PeekPassive(casterStats, targetStats);
+                        color.r = 0; color.g = 255; color.b = 0;
                     }
-                }
-            }
-
-            // CURRENT ACTIVE AND PASSIVE ATTACKS!! 
-            if (peekList.Any())
-            {
-
-                foreach (Object targetObj in peekList)
-                {
-                    GameObject targetGameObj = (GameObject)targetObj;
-
-
-
-                    CharacterStats targetStats = targetGameObj.GetComponent<CharacterStats>();
-                    CharacterStats casterStats = players[currentPlayer].GetComponent<CharacterStats>();
-
-                    Debug.Log("Passiving:" + targetStats.characterName);
-
-
-                    chosenAction.PeekPassive(casterStats, targetStats);
-                    chosenAction.PeekPassive(casterStats, targetStats);
-
-
-                    //int deduct = casterStats.currentHealth - chosenAction.PeekPassive(casterStats, targetStats);
-
-
-                    //testString += targetStats.characterName + " for " + deduct;
-
-                    //if (chosenAction.Peek(casterStats, targetStats) <= 0)
-                    //{
-                    //    testString += " mortal";
-                    //}
-
-                    //testString += " damage!";
-
-                    //Debug.Log(testString);
-                }
-            }
-            if (targetList.Any()) { 
-
-            foreach (Object targetObj in targetList)
-                {
-                    GameObject targetGameObj = (GameObject)targetObj;
-
-                    CharacterStats targetStats = targetGameObj.GetComponent<CharacterStats>();
-                    CharacterStats casterStats = players[currentPlayer].GetComponent<CharacterStats>();
-
-
-                    Debug.Log("Targeting:" + targetStats.characterName);
-
-
-                    chosenAction.Peek(casterStats, targetStats);
-
-                    //int deduct = casterStats.currentHealth - chosenAction.Peek(casterStats, targetStats);
-
-
-                    //testString += targetStats.characterName + " for " + deduct;
-
-                    //if (chosenAction.Peek(casterStats, targetStats) <= 0)
-                    //{
-                    //    testString += " mortal";
-                    //}
-
-                    //testString += " damage!";
-
-                    //Debug.Log(testString);
+                    thisCharacter.GetComponent<SpriteRenderer>().color = color;
                 }
             }
         }
+
+        // Check total peek damage
+
+        foreach (GameObject current in fightOrder)
+        {
+            current.GetComponent<CharacterStats>().currentPeekDamage = current.GetComponent<CharacterStats>().currentHealth;
+        }
+
+        // FOR ENEMY ATTACKS
+
+
+
+
+        // OTHER PLAYER ATTACKS
+        if (actionParams.Values.ToList().Any())
+        {
+            foreach (List<List<Object>> listObjects in actionParams.Values.ToList())
+            {
+                foreach (List<Object> objects in listObjects)
+                {
+                    GameObject casterObj = (GameObject)objects[0];
+                    GameObject targetObj = (GameObject)objects[1];
+
+
+                    CharacterStats casterStats = casterObj.GetComponent<CharacterStats>();
+                    CharacterStats targetStats = targetObj.GetComponent<CharacterStats>();
+                    Action action = (Action)objects[2];
+
+                    action.Peek(casterStats, targetStats);
+                }
+            }
+        }
+
+
+        if (peekParams.Values.ToList().Any())
+        {
+            foreach (List<List<Object>> listObjects in peekParams.Values.ToList())
+            {
+                foreach (List<Object> objects in listObjects)
+                {
+                    GameObject casterObj = (GameObject)objects[0];
+                    GameObject targetObj = (GameObject)objects[1];
+
+
+                    CharacterStats casterStats = casterObj.GetComponent<CharacterStats>();
+                    CharacterStats targetStats = targetObj.GetComponent<CharacterStats>();
+                    Action action = (Action)objects[2];
+
+                    action.PeekPassive(casterStats, targetStats);
+                }
+            }
+        }
+
+        // CURRENT ACTIVE AND PASSIVE ATTACKS!! 
+        if (peekList.Any())
+        {
+
+            foreach (Object targetObj in peekList)
+            {
+                GameObject targetGameObj = (GameObject)targetObj;
+
+
+
+                CharacterStats targetStats = targetGameObj.GetComponent<CharacterStats>();
+                CharacterStats casterStats = players[currentPlayer].GetComponent<CharacterStats>();
+
+                Debug.Log("Passiving:" + targetStats.characterName);
+
+
+                chosenAction.PeekPassive(casterStats, targetStats);
+                //chosenAction.PeekPassive(casterStats, targetStats);
+
+
+                //int deduct = casterStats.currentHealth - chosenAction.PeekPassive(casterStats, targetStats);
+
+
+                //testString += targetStats.characterName + " for " + deduct;
+
+                //if (chosenAction.Peek(casterStats, targetStats) <= 0)
+                //{
+                //    testString += " mortal";
+                //}
+
+                //testString += " damage!";
+
+                //Debug.Log(testString);
+            }
+        }
+        if (targetList.Any())
+        {
+
+            foreach (Object targetObj in targetList)
+            {
+                GameObject targetGameObj = (GameObject)targetObj;
+
+                CharacterStats targetStats = targetGameObj.GetComponent<CharacterStats>();
+                CharacterStats casterStats = players[currentPlayer].GetComponent<CharacterStats>();
+
+
+                Debug.Log("Targeting:" + targetStats.characterName);
+
+
+                chosenAction.Peek(casterStats, targetStats);
+
+                //int deduct = casterStats.currentHealth - chosenAction.Peek(casterStats, targetStats);
+
+
+                //testString += targetStats.characterName + " for " + deduct;
+
+                //if (chosenAction.Peek(casterStats, targetStats) <= 0)
+                //{
+                //    testString += " mortal";
+                //}
+
+                //testString += " damage!";
+
+                //Debug.Log(testString);
+            }
+        }
+
+        foreach (GameObject player in players)
+        {
+            CharacterStats playerstats = player.GetComponent<CharacterStats>();
+
+            if (playerstats.currentPeekDamage <= 0)
+            {
+                healthBlocks[players.IndexOf(player)].transform.GetChild(0).GetChild(1).GetChild(0).GetChild(4).gameObject.SetActive(true);
+            }
+            else
+            {
+                healthBlocks[players.IndexOf(player)].transform.GetChild(0).GetChild(1).GetChild(0).GetChild(4).gameObject.SetActive(false);
+            }
+        }
+
     }
 
 
@@ -1046,6 +1172,9 @@ public class BattleManager : MonoBehaviour
 
     public void goToExecuteActions()
     {
+
+        fightOrder = fightOrder.OrderByDescending(o => priority[fightOrder.IndexOf(o)]).ToList();
+
         executing = true;
         battleText.SetText("");
         autoDialogue.StartDialogue(fightOrder, actionParams, peekParams);

@@ -19,10 +19,11 @@ MonoBehaviour:
   targetsAllEnemies: 0
   targetsAllAllies: 0
   onlyTargetsEnemies: 0
-  onlyTargetsAllies: 1
+  onlyTargetsAllies: 0
   targetsSelfPassive: 1
   cannotTargetSelf: 1
   onlyTargetsSelf: 0
   description: Luna sacrifices all of her life energy to fully heal and protect a
     friend.
   message: 
+  priority: 30

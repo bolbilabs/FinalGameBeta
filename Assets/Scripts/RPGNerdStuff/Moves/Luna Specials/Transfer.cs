@@ -22,7 +22,7 @@ public class Transfer : Action
             }
             else
             {
-                return player.PeekHeal(player, baseDamage);
+                return player.PeekAttackTarget(target, baseDamage, false);
             }
         }
         else
@@ -43,7 +43,7 @@ public class Transfer : Action
             }
             else
             {
-                return player.PeekAttackTarget(target, passiveDamage, false);
+                return player.PeekHeal(player, baseDamage);
             }
         }
         else

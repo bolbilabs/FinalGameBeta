@@ -26,3 +26,4 @@ MonoBehaviour:
   description: Rory finds his bravery and taunts the enemies, causing them to retaliate.
     Rory will not survive the onslaught.
   message: 
+  priority: 40

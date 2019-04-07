@@ -13,6 +13,7 @@ public class PerfectHeal : Action
         // Displays if attack is lethal to anyone.
         if (target != null)
         {
+            target.currentPeekDamage = target.currentHealth;
             return target.maxHealth.GetValue();
         }
         else

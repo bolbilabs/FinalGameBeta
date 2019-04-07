@@ -55,6 +55,8 @@ public class PlayerStats : CharacterStats
 
             // Subtract damage from health
             currentHealth -= damage;
+            currentHealth = Mathf.Clamp(currentHealth, 0, int.MaxValue);
+
             Debug.Log(transform.name + " takes " + damage + " damage.");
 
 
@@ -170,7 +172,7 @@ public class PlayerStats : CharacterStats
         if (target != null)
         {
             target.currentHealth += amount;
-            currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth.GetValue());
+            target.currentHealth = Mathf.Clamp(target.currentHealth, 0, target.maxHealth.GetValue());
             autoDialogue.MessageMe(target.characterName + " receives " + amount + " health!");
         }
         else
@@ -190,14 +192,16 @@ public class PlayerStats : CharacterStats
         amount = Mathf.Clamp(amount, 0, int.MaxValue);
 
         // Subtract damage from health
-        Debug.Log(transform.name + " will have " + (currentPeekDamage + amount) + " health.");
+        Debug.Log(target.characterName + " will have " + (target.currentPeekDamage + amount) + " health.");
 
         //if (currentHealth - damage <= 0)
         //{
         //    Debug.Log(transform.name + " is in peril!");
         //}
 
-        currentPeekDamage += amount;
+        target.currentPeekDamage += amount;
+        target.currentPeekDamage = Mathf.Clamp(target.currentPeekDamage, 0, target.maxHealth.GetValue());
+
 
         return currentPeekDamage;
     }
@@ -222,29 +226,33 @@ public class PlayerStats : CharacterStats
 
     public override void RoryOn(CharacterStats roryStats)
     {
-        // Player Dialogue.
-        autoDialogue.MessageMe("He-HEY.");
-        autoDialogue.MessageMe("You can't hurt my friends any longer... Yeah. That's right!");
-        autoDialogue.MessageMe("I won't let you! You hear?");
-
         if (!isRoared)
         {
-            if (rich.gameObject.activeSelf)
-            {
-                autoDialogue.MessageMe("Rich was taken aback by Rory's newfound demeanor.");
-                autoDialogue.MessageMe("Rory?&&&% Is that even you?");
-                autoDialogue.MessageMe("Rory leered fiercely at Rich.");
-            }
-            //
+            // Player Dialogue.
+            autoDialogue.MessageMe("He-HEY.");
+            autoDialogue.MessageMe("You can't hurt my friends any longer... Yeah. That's right!");
+            autoDialogue.MessageMe("I won't let you! You hear?");
+
+            //if (!isRoared)
+            //{
+            //    if (rich.gameObject.activeSelf)
+            //    {
+            //        autoDialogue.MessageMe("Rich was taken aback by Rory's newfound demeanor.");
+            //        autoDialogue.MessageMe("Rory?&&&% Is that even you?");
+            //        autoDialogue.MessageMe("Rory leered fiercely at Rich.");
+            //    }
+            //    //
+            //    isRoared = true;
+            //}
+
             isRoared = true;
+            //autoDialogue.MessageMe("Thank you for showing me how to be brave, Rich. This one's for you.");
+
+            //autoDialogue.MessageMe("Rory expelled a battlecry as he slowly approached his enemy.");
+            //autoDialogue.MessageMe("His eyes were of that of a lion's, waiting to claim its pray.");
+            //autoDialogue.MessageMe("Bright. Brave. He found a fire inside of him that burned hotter than a Luchacabra's muscles.");
+            autoDialogue.MessageMe("Pure fear inundated the enemy line.");
         }
-
-        autoDialogue.MessageMe("Thank you for showing me how to be brave, Rich. This one's for you.");
-
-        autoDialogue.MessageMe("Rory expelled a battlecry as he slowly approached his enemy.");
-        autoDialogue.MessageMe("His eyes were of that of a lion's, waiting to claim its pray.");
-        autoDialogue.MessageMe("Bright. Brave. He found a fire inside of him that burned hotter than a Luchacabra's muscles.");
-        autoDialogue.MessageMe("Pure fear inundated the enemy line.");
     }
 
     public override void TurnOver()
@@ -259,6 +267,11 @@ public class PlayerStats : CharacterStats
         {
             autoDialogue.MessageMe("The last of Luna's light...&&&&&% has faded.");
             isPermahealed = false;
+        }
+
+        if (isRoared)
+        {
+            isRoared = false;
         }
     }
 
