@@ -13,6 +13,9 @@ TagManager:
   - PlayerCollider
   - MapEnemies
   - CharacterSit
+  - Interactables
+  - Leader
+  - Textbox
   layers:
   - Default
   - TransparentFX

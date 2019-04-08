@@ -8,6 +8,9 @@ public class DialogueTrigger : MonoBehaviour
 
     public void TriggerDialogue ()
     {
-        FindObjectOfType<DialogueManager>().StartDialogue(dialogue);
+        if (!GameControl.isFrozen)
+        {
+            FindObjectOfType<DialogueManager>().StartDialogue(dialogue);
+        }
     }
 }

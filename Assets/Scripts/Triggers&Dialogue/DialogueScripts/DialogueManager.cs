@@ -33,6 +33,8 @@ public class DialogueManager : MonoBehaviour
 
     private int currentChar = 0;
 
+    private Animator windowAnim;
+
 
     // Start is called before the first frame update
     void Awake()
@@ -46,6 +48,7 @@ public class DialogueManager : MonoBehaviour
 
     void Start()
     {
+        windowAnim = dialogueText.transform.parent.GetComponent<Animator>();
     }
 
     public void StartDialogue (Dialogue dialogue)
@@ -59,6 +62,10 @@ public class DialogueManager : MonoBehaviour
         currentChar = 0;
 
         lineOffset = 0;
+
+        windowAnim.SetBool("IsOpen", true);
+
+        GameControl.FreezeOverworld();
 
 
         sentences = new Queue<string>();
@@ -122,7 +129,7 @@ public class DialogueManager : MonoBehaviour
         }
         else
         {
-            dialogueText.text = "<mspace=2.75em>" + currentSentence;
+            dialogueText.text = "<mspace=1em>" + currentSentence;
             StopAllCoroutines();
             coroutineRunning = false;
         }
@@ -134,7 +141,7 @@ public class DialogueManager : MonoBehaviour
 
     IEnumerator TypeSentence (string sentence)
     {
-        dialogueText.text = "<mspace=2.75em>";
+        dialogueText.text = "<mspace=1em>";
         currentSentence = sentence;
         coroutineRunning = true;
         foreach (char letter in sentence.ToCharArray())
@@ -177,6 +184,11 @@ public class DialogueManager : MonoBehaviour
         //rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         inCutscene = false;
 
+        windowAnim.SetBool("IsOpen", false);
+        GameControl.UnfreezeOverworld();
+
+
+
 
         if (scriptTriggers.Length > 0)
         {
@@ -194,7 +206,7 @@ public class DialogueManager : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetKey("z") || Input.GetKey("x"))
+        if (!GameControl.isBattling && (Input.GetKeyDown("z") || Input.GetKeyDown("x")))
         {
             DisplayNextSentence();
         }

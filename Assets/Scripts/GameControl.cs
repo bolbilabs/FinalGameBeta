@@ -20,6 +20,10 @@ public class GameControl : MonoBehaviour
 
     public static Dictionary<int, bool> disabledEnemy = new Dictionary<int, bool>();
 
+    public static bool isFrozen = false;
+
+    public static bool isBattling = false;
+
 
     void Awake()
     {
@@ -74,6 +78,31 @@ public class GameControl : MonoBehaviour
     public static void StartBattle(List<GameObject> enemiez)
     {
         enemies = enemiez;
+
+        FreezeOverworld();
+
+        Camera.main.gameObject.GetComponent<FadeOutGoop>().enabled = true;
+
+        isBattling = true;
+
+
+        //SceneManager.LoadScene("BattleScene");
+    }
+
+    public static void EndBattle()
+    {
+        enemies = new List<GameObject>();
+        Camera.main.gameObject.GetComponent<FadeOut>().enabled = true;
+
+        isBattling = false;
+
+        //SceneManager.LoadScene("Overworld");
+
+    }
+
+
+    public static void FreezeOverworld()
+    {
         mapPosition = GameObject.FindWithTag("Players").transform.GetChild(0).position;
 
         GameObject.FindWithTag("Players").transform.GetChild(0).GetComponent<PlayerMovements>().enabled = false;
@@ -87,22 +116,24 @@ public class GameControl : MonoBehaviour
             GameObject.FindGameObjectWithTag("MapEnemies").transform.GetChild(i).GetComponent<EnemyFieldController>().enabled = false;
         }
 
+        isFrozen = true;
 
-
-        Camera.main.gameObject.GetComponent<FadeOutGoop>().enabled = true;
-
-
-
-        //SceneManager.LoadScene("BattleScene");
     }
 
-    public static void EndBattle()
+    public static void UnfreezeOverworld()
     {
-        enemies = new List<GameObject>();
-        Camera.main.gameObject.GetComponent<FadeOut>().enabled = true;
+        mapPosition = GameObject.FindWithTag("Players").transform.GetChild(0).position;
 
-        //SceneManager.LoadScene("Overworld");
+        GameObject.FindWithTag("Players").transform.GetChild(0).GetComponent<PlayerMovements>().enabled = true;
 
+        GameObject.FindWithTag("Players").transform.GetChild(0).GetComponent<Animator>().enabled = true;
+        
+        for (int i = 0; i < GameObject.FindGameObjectWithTag("MapEnemies").transform.childCount; i++)
+        {
+            GameObject.FindGameObjectWithTag("MapEnemies").transform.GetChild(i).GetComponent<EnemyFieldController>().enabled = true;
+        }
+
+        isFrozen = false;
     }
 
 
