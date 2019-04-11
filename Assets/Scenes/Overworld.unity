@@ -3438,6 +3438,8 @@ MonoBehaviour:
   timeDelay: 0.02
   inCutscene: 0
   lineSize: 38
+  bigLineSize: 38
+  smallLineSize: 0
 --- !u!1 &397878787
 GameObject:
   m_ObjectHideFlags: 0
