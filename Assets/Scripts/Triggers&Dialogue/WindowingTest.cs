@@ -10,7 +10,7 @@ public class WindowingTest : MonoBehaviour
     void Awake()
     {
 
-        Screen.SetResolution(640, 480, false, 60);
+        Screen.SetResolution(640, 480, true, 60);
     }
 
     //public Text text;

@@ -238,8 +238,8 @@ MonoBehaviour:
     - {fileID: 0}
     - {fileID: 0}
     - {fileID: 0}
-    - {fileID: 21300004, guid: 9f7cd111c3e4a46259fae870e0c2cc06, type: 3}
-    - {fileID: 21300002, guid: 9f7cd111c3e4a46259fae870e0c2cc06, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300008, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
     - {fileID: 0}
     sentences:
     - Bribbit!
@@ -3134,6 +3134,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 300
   anim: {fileID: 233565642}
+  players: []
 --- !u!212 &233565640
 SpriteRenderer:
   m_ObjectHideFlags: 0
