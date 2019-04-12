@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using TMPro;
+using UnityEngine.UI;
 
 public class BattleManager : MonoBehaviour
 {
@@ -195,6 +196,11 @@ public class BattleManager : MonoBehaviour
                 healthBlocks.Add(GameObject.FindGameObjectWithTag("HealthBlock").transform.GetChild(players.IndexOf(player)).gameObject);
                 PlayerStats currStats = player.GetComponent<PlayerStats>();
                 healthBlocks[players.IndexOf(player)].transform.GetChild(0).GetChild(1).GetChild(0).GetChild(1).GetComponent<TextMeshProUGUI>().SetText(currStats.characterName + "\n" + currStats.currentHealth + "/" + currStats.maxHealth.GetValue());
+                healthBlocks[players.IndexOf(player)].transform.GetChild(0).GetChild(1).GetChild(0).GetChild(0).GetComponent<Image>().sprite = currStats.playerMiniPortrait;
+
+                healthBlocks[players.IndexOf(player)].transform.GetChild(0).GetChild(1).GetChild(0).GetChild(2).GetChild(0).GetComponent<Slider>().value = (float)(((float)currStats.currentHealth)/((float)currStats.maxHealth.GetValue()));
+
+
                 healthBlocks[players.IndexOf(player)].transform.GetChild(0).GetChild(1).GetChild(0).GetChild(3).GetComponent<SpriteRenderer>().sprite = currStats.bodySprite;
             }
             else

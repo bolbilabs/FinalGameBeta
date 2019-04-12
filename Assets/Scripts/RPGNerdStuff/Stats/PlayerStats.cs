@@ -11,6 +11,9 @@ using UnityEngine.SceneManagement;
 
 public class PlayerStats : CharacterStats
 {
+
+    public Sprite playerMiniPortrait;
+
     public Stat maxHope;
 
     public int hopeFlux;
