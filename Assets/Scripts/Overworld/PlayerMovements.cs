@@ -9,10 +9,61 @@ public class PlayerMovements : MonoBehaviour
 	private bool playerMoving;
 	private Vector2 lastMove;
 
+    public List<GameObject> players = new List<GameObject>();
+
     // Start is called before the first frame update
     void Start()
     {
 		anim = GetComponent<Animator>();
+
+        GameObject gameController = GameObject.FindWithTag("GameController").gameObject;
+
+
+        //string characterName;
+
+        for (int i = 0; i < gameController.transform.childCount; i++)
+        {
+            if (gameController.transform.GetChild(i).gameObject.activeSelf)
+            {
+                players.Add(gameController.transform.GetChild(i).gameObject);
+            }
+            //characterName = gameController.transform.GetChild(i).gameObject.GetComponent<PlayerStats>().characterName;
+
+        }
+
+        for (int i = 0; i < players.Count; i++)
+        {
+            string currentName = players[i].GetComponent<PlayerStats>().characterName;
+
+            if (currentName == "Paul")
+            {
+                GameObject.FindWithTag("Players").transform.GetChild(i).GetComponent<Animator>().SetBool("isPaul", true);
+            }
+            else if (currentName == "Luna")
+            {
+                GameObject.FindWithTag("Players").transform.GetChild(i).GetComponent<Animator>().SetBool("isLuna", true);
+            }
+            else if (currentName == "Rich")
+            {
+                GameObject.FindWithTag("Players").transform.GetChild(i).GetComponent<Animator>().SetBool("isRich", true);
+            }
+            else if (currentName == "Rory")
+            {
+                GameObject.FindWithTag("Players").transform.GetChild(i).GetComponent<Animator>().SetBool("isRory", true);
+            }
+        }
+
+        for (int i = 0; i < GameObject.FindWithTag("Players").transform.childCount; i++)
+        {
+            if (!GameObject.FindWithTag("Players").transform.GetChild(i).GetComponent<Animator>().GetBool("isPaul") &&
+                !GameObject.FindWithTag("Players").transform.GetChild(i).GetComponent<Animator>().GetBool("isLuna") &&
+                !GameObject.FindWithTag("Players").transform.GetChild(i).GetComponent<Animator>().GetBool("isRich") &&
+                !GameObject.FindWithTag("Players").transform.GetChild(i).GetComponent<Animator>().GetBool("isRory"))
+            {
+                GameObject.FindWithTag("Players").transform.GetChild(i).gameObject.SetActive(false);
+            }
+        }
+
     }
 
     // Update is called once per frame

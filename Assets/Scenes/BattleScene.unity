@@ -763,10 +763,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 525ee159613ba4a84b6e67ccd40af8eb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dialogueText: {fileID: 321612001}
+  shortDialogueText: {fileID: 0}
+  longDialogueText: {fileID: 0}
+  image: {fileID: 0}
   timeDelay: 1
   inCutscene: 0
   lineSize: 38
+  bigLineSize: 38
+  smallLineSize: 0
 --- !u!114 &727565337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1172,7 +1176,7 @@ PrefabInstance:
     - target: {fileID: 5957031690480050654, guid: 2779c6fe1512f4e3caed12d1c3cf6c81,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 320
+      value: 400
       objectReference: {fileID: 0}
     - target: {fileID: 5957031690480050654, guid: 2779c6fe1512f4e3caed12d1c3cf6c81,
         type: 3}
@@ -1605,7 +1609,7 @@ PrefabInstance:
     - target: {fileID: 5957031690480050654, guid: 2779c6fe1512f4e3caed12d1c3cf6c81,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 480
+      value: 240
       objectReference: {fileID: 0}
     - target: {fileID: 5957031690480050654, guid: 2779c6fe1512f4e3caed12d1c3cf6c81,
         type: 3}
@@ -2261,7 +2265,7 @@ PrefabInstance:
     - target: {fileID: 5957031690480050654, guid: 2779c6fe1512f4e3caed12d1c3cf6c81,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 320
+      value: 80
       objectReference: {fileID: 0}
     - target: {fileID: 5957031690480050654, guid: 2779c6fe1512f4e3caed12d1c3cf6c81,
         type: 3}

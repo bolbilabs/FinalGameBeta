@@ -3133,7 +3133,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   moveSpeed: 300
-  anim: {fileID: 0}
+  anim: {fileID: 233565642}
 --- !u!212 &233565640
 SpriteRenderer:
   m_ObjectHideFlags: 0
