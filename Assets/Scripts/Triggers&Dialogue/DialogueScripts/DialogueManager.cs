@@ -8,6 +8,7 @@ public class DialogueManager : MonoBehaviour
 {
     private Queue<string> sentences;
     private Queue<Sprite> images;
+    private Queue<AudioClip> textBlips;
 
     private TextMeshProUGUI dialogueText;
 
@@ -20,6 +21,10 @@ public class DialogueManager : MonoBehaviour
     //public Animator animator;
 
     public Image image;
+
+    public AudioClip currentClip;
+
+    public AudioSource speaker;
 
     public float timeDelay = 1.0f;
 
@@ -35,7 +40,7 @@ public class DialogueManager : MonoBehaviour
     public int lineSize = 38;
 
     public int bigLineSize = 38;
-    public int smallLineSize = 0;
+    public int smallLineSize = 32;
 
     private int currentLine = 0;
     private int lineOffset = 0;
@@ -44,7 +49,12 @@ public class DialogueManager : MonoBehaviour
 
     private Animator windowAnim;
 
-    private bool hasImage = false;
+    public bool hasImage = false;
+
+    public bool noAnim = false;
+    public bool notOverworld = false;
+
+    public bool slowDown = false;
 
 
     // Start is called before the first frame update
@@ -52,6 +62,7 @@ public class DialogueManager : MonoBehaviour
     {
         sentences = new Queue<string>();
         images = new Queue<Sprite>();
+        textBlips = new Queue<AudioClip>();
         scriptTriggers = new MonoBehaviour[0];
         
     }
@@ -59,7 +70,10 @@ public class DialogueManager : MonoBehaviour
 
     void Start()
     {
-        windowAnim = shortDialogueText.transform.parent.GetComponent<Animator>();
+        if (!noAnim)
+        {
+            windowAnim = shortDialogueText.transform.parent.GetComponent<Animator>();
+        }
     }
 
     public void StartDialogue (Dialogue dialogue)
@@ -73,13 +87,22 @@ public class DialogueManager : MonoBehaviour
 
         lineOffset = 0;
 
-        windowAnim.SetBool("IsOpen", true);
+        if (!noAnim)
+        {
+            windowAnim.SetBool("IsOpen", true);
+        }
 
-        GameControl.FreezeOverworld();
+
+        if (!notOverworld)
+        {
+            GameControl.FreezeOverworld();
+        }
 
 
         sentences = new Queue<string>();
         images = new Queue<Sprite>();
+        textBlips = new Queue<AudioClip>();
+
         scriptTriggers = new MonoBehaviour[0];
 
 
@@ -89,6 +112,8 @@ public class DialogueManager : MonoBehaviour
         //Debug.Log("Starting conversation with " + dialogue.name);
 
         sentences.Clear();
+        images.Clear();
+        textBlips.Clear();
 
         foreach (string sentence in dialogue.sentences)
         {
@@ -98,6 +123,11 @@ public class DialogueManager : MonoBehaviour
         foreach (Sprite picture in dialogue.face)
         {
             images.Enqueue(picture);
+        }
+
+        foreach (AudioClip audioClip in dialogue.clips)
+        {
+            textBlips.Enqueue(audioClip);
         }
 
         scriptTriggers = dialogue.scriptTriggers;
@@ -125,6 +155,7 @@ public class DialogueManager : MonoBehaviour
                 shortDialogueText.gameObject.SetActive(true);
                 longDialogueText.gameObject.SetActive(false);
                 dialogueText = shortDialogueText;
+
             }
             else
             {
@@ -141,8 +172,10 @@ public class DialogueManager : MonoBehaviour
 
             lineOffset = 0;
             string sentence = sentences.Dequeue();
+            currentClip = textBlips.Dequeue();
             //Debug.Log(sentence);
             StopAllCoroutines();
+            slowDown = false;
             StartCoroutine(TypeSentence(sentence));
 
 
@@ -166,13 +199,19 @@ public class DialogueManager : MonoBehaviour
         coroutineRunning = true;
         foreach (char letter in sentence.ToCharArray())
         {
-            if (letter != '&' && letter != '%' && letter != '@')
+
+            if (letter != '&' && letter != '%' && letter != '@' && letter != '#')
             {
                 dialogueText.text += letter;
+
+                if (currentClip != null)
+                {
+                    speaker.PlayOneShot(currentClip);
+                }
             }
             if (letter == ' ')
             {
-                string subStr = sentence.Substring(currentChar + 1);
+                string subStr = sentence.Substring(currentChar-1);
                 lineOffset = 0;
                 bool escape = false;
                 foreach (char letter2 in subStr.ToCharArray())
@@ -183,24 +222,39 @@ public class DialogueManager : MonoBehaviour
                         {
                             escape = true;
                         }
-                        if (currentLine + lineOffset >= lineSize - 2)
+                        if (!hasImage)
                         {
-                            dialogueText.text += '\n';
-                            currentLine = -1;
-                            escape = true;
+                            if (currentLine + lineOffset >= lineSize - 4)
+                            {
+                                dialogueText.text += '\n';
+                                currentLine = -1;
+                                escape = true;
+                            }
                         }
-                        if (letter != '&' && letter != '%')
+                        else
+                        {
+                            if (currentLine + lineOffset >= smallLineSize - 4)
+                            {
+                                dialogueText.text += '\n';
+                                currentLine = -1;
+                                escape = true;
+                            }
+                        }
+                        if (letter != '&' && letter != '%' && letter != '#')
                         {
                             lineOffset++;
                         }
                     }
                 }
             }
+            if (letter == '#')
+            {
+                slowDown = true;
+            }
             if (letter == '&')
             {
                 yield return new WaitForSeconds(timeDelay);
                 currentLine -= 1;
-
             }
             if (letter == '%')
             {
@@ -212,6 +266,7 @@ public class DialogueManager : MonoBehaviour
             yield return new WaitForSeconds(timeDelay);
         }
         coroutineRunning = false;
+        slowDown = false;
     }
 
     public void EndDialogue()
@@ -221,8 +276,15 @@ public class DialogueManager : MonoBehaviour
         //rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         inCutscene = false;
 
-        windowAnim.SetBool("IsOpen", false);
-        GameControl.UnfreezeOverworld();
+        if (!noAnim)
+        {
+            windowAnim.SetBool("IsOpen", false);
+        }
+
+        if (!notOverworld)
+        {
+            GameControl.UnfreezeOverworld();
+        }
 
 
 
@@ -243,7 +305,7 @@ public class DialogueManager : MonoBehaviour
 
     void Update()
     {
-        if (!GameControl.isBattling && (Input.GetKeyDown("z") || Input.GetKeyDown("x")))
+        if (!slowDown && !GameControl.isBattling && (Input.GetKeyDown("z") || Input.GetKeyDown("x")))
         {
             DisplayNextSentence();
         }

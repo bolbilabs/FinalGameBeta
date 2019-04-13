@@ -19,7 +19,7 @@ MonoBehaviour:
   targetsAllEnemies: 0
   targetsAllAllies: 0
   onlyTargetsEnemies: 0
-  onlyTargetsAllies: 0
+  onlyTargetsAllies: 1
   targetsSelfPassive: 1
   cannotTargetSelf: 1
   onlyTargetsSelf: 0

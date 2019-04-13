@@ -16,6 +16,8 @@ TagManager:
   - Interactables
   - Leader
   - Textbox
+  - GameOver
+  - KOChar
   layers:
   - Default
   - TransparentFX
@@ -28,7 +30,7 @@ TagManager:
   - Players
   - Wall
   - Leader
-  - 
+  - UI2
   - 
   - 
   - 

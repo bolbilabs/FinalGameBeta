@@ -10,6 +10,8 @@ public class Dialogue
 
     public Sprite[] face;
 
+    public AudioClip[] clips;
+
     [TextArea(3, 10)]
     public string[] sentences;
 

@@ -42,12 +42,31 @@ public class AutoDialogue : MonoBehaviour
 
     private int currentChar = 0;
 
+    private bool doneWithLine = false;
+
+
 
 
     // List of characters, list of actions, list of triple objects
     public List<List<List<Object>>> actionOrder = new List<List<List<Object>>>();
     public List<List<List<Object>>> passiveOrder = new List<List<List<Object>>>();
 
+
+    private bool defeated = false;
+
+    private bool triggerOnce = false;
+
+    public GameObject defeatedPlayer;
+
+    public Image blackFade;
+
+    public Transform moveToThis;
+
+    int gameOverState = 0;
+    bool quitSelected = false;
+
+    public DialogueManager postBattleDialogue;
+    public Dialogue gameOver1;
 
 
     // Start is called before the first frame update
@@ -75,6 +94,11 @@ public class AutoDialogue : MonoBehaviour
         currentChar = 0;
 
         lineOffset = 0;
+
+        defeated = false;
+        triggerOnce = false;
+
+        gameOverState = 0;
 
 
         //sentences = new List<string>();
@@ -142,8 +166,14 @@ public class AutoDialogue : MonoBehaviour
         //{
         //    images.Enqueue(picture);
         //}
+        if (!defeated)
+        {
+            DisplayNextSentence();
+        }
+        else
+        {
 
-        DisplayNextSentence();
+        }
     }
 
     public void DisplayNextSentence()
@@ -168,6 +198,8 @@ public class AutoDialogue : MonoBehaviour
         //Debug.Log("actionparams" + actionOrder.Count);
         //Debug.Log("passiveorder" + passiveOrder.Count);
         //Debug.Log("-----");
+
+        doneWithLine = false;
 
 
         if (sentences.Count > 0 && bonusSentences.Count <= 0)
@@ -341,7 +373,7 @@ public class AutoDialogue : MonoBehaviour
             currentLine = 0;
             foreach (char letter in sentence.ToCharArray())
             {
-                if (letter != '&' && letter != '%' && letter != '@')
+                if (letter != '&' && letter != '%' && letter != '@' && letter != '^')
                 {
                     dialogueText.text += letter;
                 }
@@ -366,7 +398,7 @@ public class AutoDialogue : MonoBehaviour
                                 currentLine = -1;
                                 escape = true;
                             }
-                            if (letter != '&' && letter != '%')
+                            if (letter != '&' && letter != '%' && letter != '^')
                             {
                                 lineOffset++;
                             }
@@ -389,6 +421,15 @@ public class AutoDialogue : MonoBehaviour
                 {
                     GameControl.EndBattle();
                     yield return new WaitForSeconds(10);
+                }
+                if (letter == '^')
+                {
+                    currentLine -= 1;
+                    defeated = true;
+                    GameControl.isBattling = false;
+                    GameControl.characterOut = defeatedPlayer;
+                    GameControl.downCut = true;
+                    StartCoroutine(defeatedCharacter(defeatedPlayer));
                 }
                 currentChar++;
                 currentLine++;
@@ -492,14 +533,20 @@ public class AutoDialogue : MonoBehaviour
 
 
         RecheckActive();
+        doneWithLine = true;
+
+        yield return new WaitForSeconds((timeDelay * messagePause) * 3);
+
 
 
         //Debug.Log(actionOrder.Count);
         //Debug.Log(passiveOrder.Count);
         //Debug.Log(sentences.Count);
         //Debug.Log("");
-
-        DisplayNextSentence();
+        if (!defeated)
+        {
+            DisplayNextSentence();
+        }
     }
 
     public void EndDialogue()
@@ -527,6 +574,22 @@ public class AutoDialogue : MonoBehaviour
         //        }
         //    }
         //}
+
+    }
+
+    public IEnumerator flashShock(GameObject shock)
+    {
+        shock.GetComponent<SpriteRenderer>().material.SetFloat("_InvertColors", 1);
+        yield return new WaitForSeconds(0.1f);
+        shock.GetComponent<SpriteRenderer>().material.SetFloat("_InvertColors", 0);
+        yield return new WaitForSeconds(0.1f);
+        shock.GetComponent<SpriteRenderer>().material.SetFloat("_InvertColors", 1);
+        yield return new WaitForSeconds(0.1f);
+        shock.GetComponent<SpriteRenderer>().material.SetFloat("_InvertColors", 0);
+        yield return new WaitForSeconds(0.1f);
+        shock.GetComponent<SpriteRenderer>().material.SetFloat("_InvertColors", 1);
+        yield return new WaitForSeconds(0.1f);
+        shock.GetComponent<SpriteRenderer>().material.SetFloat("_InvertColors", 0);
 
     }
 
@@ -563,7 +626,7 @@ public class AutoDialogue : MonoBehaviour
 
     void Update()
     {
-        if (inCutscene)
+        if (inCutscene && gameOverState == 0)
         {
             timeDelay = timeDelayNorm;
             if (Input.GetKey("z") || Input.GetKey("x"))
@@ -575,11 +638,111 @@ public class AutoDialogue : MonoBehaviour
                    timeDelay = 0.0001f;
                 }
             }
+
+            if (!defeated && doneWithLine && (Input.GetKeyDown("z") || Input.GetKeyDown("x")))
+            {
+                DisplayNextSentence();
+            }
+        } else if (gameOverState == 1)
+        {
+            if (Input.GetKeyDown("z"))
+            {
+                if (!quitSelected)
+                {
+                    Camera.main.GetComponent<Animator>().SetBool("IsGlitching", true);
+                    StopAllCoroutines();
+                    StartCoroutine(scrambleDelay());
+                    gameOverState = 2;
+                } else if (quitSelected)
+                {
+                    Application.Quit();
+                }
+            }
+
+            if (Input.GetKeyDown("left") || Input.GetKeyDown("right") || Input.GetKeyDown("up") || Input.GetKeyDown("down"))
+            {
+                quitSelected = !quitSelected;
+
+                if (quitSelected)
+                {
+                    GameObject.FindGameObjectWithTag("GameOver").transform.GetChild(1).GetComponent<TextMeshProUGUI>().color = new Color32(255, 255, 255, 255);
+                    GameObject.FindGameObjectWithTag("GameOver").transform.GetChild(1).GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Normal;
+
+                    GameObject.FindGameObjectWithTag("GameOver").transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = new Color32(97, 225, 108, 255);
+                    GameObject.FindGameObjectWithTag("GameOver").transform.GetChild(2).GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Underline;
+                }
+                else
+                {
+                    GameObject.FindGameObjectWithTag("GameOver").transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = new Color32(255, 255, 255, 255);
+                    GameObject.FindGameObjectWithTag("GameOver").transform.GetChild(2).GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Normal;
+
+                    GameObject.FindGameObjectWithTag("GameOver").transform.GetChild(1).GetComponent<TextMeshProUGUI>().color = new Color32(97, 225, 108, 255);
+                    GameObject.FindGameObjectWithTag("GameOver").transform.GetChild(1).GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Underline;
+                }
+            }
+        } else if (gameOverState == 2)
+        {
+
         }
+    }
+
+    public IEnumerator scrambleDelay()
+    {
+        yield return new WaitForSeconds(7.5f);
+        postBattleDialogue.longDialogueText.gameObject.transform.parent.gameObject.SetActive(true);
+        postBattleDialogue.StartDialogue(gameOver1);
     }
 
     public void MessageMe (string sentenceAdd)
     {
         bonusSentences.Add(sentenceAdd);
+    }
+
+
+
+    public IEnumerator defeatedCharacter (GameObject player)
+    {
+
+        GameObject characterBody = battleManager.healthBlocks[battleManager.players.IndexOf(player)].transform.GetChild(0).GetChild(1).GetChild(0).GetChild(3).gameObject;
+        characterBody.GetComponent<SpriteRenderer>().sortingOrder = 200;
+        characterBody.GetComponent<Animator>().SetBool("IsDoom", true);
+        //blackFade.enabled = true;
+
+        Color fadeColor = blackFade.color;
+
+        Vector3 characterBodyStart = characterBody.transform.position;
+
+        for (float i = 0; i < 1; i += 0.01f)
+        {
+            characterBody.transform.position = Vector3.Lerp(characterBodyStart, moveToThis.position, i);
+            fadeColor.a = i;
+            blackFade.color = fadeColor;
+            yield return new WaitForSeconds(0.01f);
+        }
+
+        yield return new WaitForSeconds(4);
+        fadeColor = dialogueText.transform.parent.gameObject.GetComponent<Image>().color;
+
+
+        for (float i = 0; i < 1; i += 0.01f)
+        {
+
+            fadeColor.a = 1.0f -i;
+
+            for (int j = 0;  j< GameObject.FindGameObjectWithTag("GameOver").transform.childCount; j++)
+            {
+                GameObject.FindGameObjectWithTag("GameOver").transform.GetChild(j).GetComponent<TextMeshProUGUI>().alpha = i;
+            }
+
+            dialogueText.GetComponent<TextMeshProUGUI>().alpha = 1.0f - i;
+            dialogueText.transform.parent.gameObject.GetComponent<Image>().color = fadeColor;
+
+            quitSelected = false;
+
+            yield return new WaitForSeconds(0.01f);
+        }
+        gameOverState = 1;
+
+
     }
 }

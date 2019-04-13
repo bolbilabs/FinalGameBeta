@@ -24,6 +24,11 @@ public class GameControl : MonoBehaviour
 
     public static bool isBattling = false;
 
+    public static int numDeaths = 0;
+    public static bool downCut = false;
+    public static bool downCut2 = false;
+    public static GameObject characterOut;
+
 
     void Awake()
     {
@@ -97,7 +102,13 @@ public class GameControl : MonoBehaviour
         isBattling = false;
 
         //SceneManager.LoadScene("Overworld");
+    }
 
+
+    public static void EndBattleDeath()
+    {
+        enemies = new List<GameObject>();
+        SceneManager.LoadScene("Overworld");
     }
 
 
@@ -167,6 +178,43 @@ public class GameControl : MonoBehaviour
                         GameObject.FindWithTag("MapEnemies").transform.GetChild(i).gameObject.SetActive(false);
                     }
                 }
+            }
+
+            if (downCut)
+            {
+                GameObject downPlayer = GameObject.FindWithTag("KOChar");
+                Color charColor = downPlayer.GetComponent<SpriteRenderer>().color;
+                charColor.a = 1;
+
+                downPlayer.GetComponent<SpriteRenderer>().color = charColor;
+
+                string currentName = characterOut.GetComponent<PlayerStats>().characterName;
+
+                Animator currentAnim = downPlayer.GetComponent<Animator>();
+                
+                if (currentName == "Paul")
+                {
+                    currentAnim.SetBool("isPaul", true);
+                }
+                else if (currentName == "Luna")
+                {
+                    currentAnim.SetBool("isLuna", true);
+
+                }
+                else if (currentName == "Rich")
+                {
+                    currentAnim.SetBool("isRich", true);
+                }
+                else if (currentName == "Rory")
+                {
+                    currentAnim.SetBool("isRory", true);
+                }
+
+                currentAnim.SetBool("IsKO", true);
+
+                downPlayer.transform.position = mapPosition;
+                downCut = false;
+                downCut2 = true;
             }
         }
     }

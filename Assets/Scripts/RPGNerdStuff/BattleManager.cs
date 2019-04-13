@@ -93,6 +93,8 @@ public class BattleManager : MonoBehaviour
     public List<GameObject> characterSit = new List<GameObject>();
 
 
+    public List<Material> invertMat = new List<Material>();
+
 
     // This function is called to start battles.
     // The parameter here is for non-random encounters
@@ -102,7 +104,7 @@ public class BattleManager : MonoBehaviour
         //players = GameObject.FindGameObjectsWithTag("Player");
         //players = GameObject.FindGameObjectsWithTag("Enemy");
 
-
+        int i = 0;
         if (GameControl.enemies != null && GameControl.enemies.Count > 0)
         {
             foreach (GameObject enemy in GameControl.enemies)
@@ -110,6 +112,9 @@ public class BattleManager : MonoBehaviour
                 GameObject currentEnemy = Instantiate(enemy);
                 currentEnemy.transform.SetParent(GameObject.FindWithTag("Enemies").transform);
                 //enemies.Add(currentEnemy);
+
+                currentEnemy.GetComponent<SpriteRenderer>().material = invertMat[i];
+                i++;
             }
         }
         
@@ -199,6 +204,37 @@ public class BattleManager : MonoBehaviour
                 healthBlocks[players.IndexOf(player)].transform.GetChild(0).GetChild(1).GetChild(0).GetChild(0).GetComponent<Image>().sprite = currStats.playerMiniPortrait;
 
                 healthBlocks[players.IndexOf(player)].transform.GetChild(0).GetChild(1).GetChild(0).GetChild(2).GetChild(0).GetComponent<Slider>().value = (float)(((float)currStats.currentHealth)/((float)currStats.maxHealth.GetValue()));
+
+
+                //healthBlocks[players.IndexOf(player)].transform.GetChild(0).GetChild(1).GetChild(0).GetChild(3).GetComponent<Animator>() = player.GetComponent<PlayerStats>()
+
+                string currentName = player.GetComponent<PlayerStats>().characterName;
+
+                Animator currentAnim = healthBlocks[players.IndexOf(player)].transform.GetChild(0).GetChild(1).GetChild(0).GetChild(3).GetComponent<Animator>();
+
+                if (currentName == "Paul")
+                {
+                    currentAnim.SetBool("isPaul", true);
+                    currentAnim.SetFloat("LastY", 1.0f);
+                }
+                else if (currentName == "Luna")
+                {
+                    currentAnim.SetBool("isLuna", true);
+                    currentAnim.SetFloat("LastY", 1.0f);
+
+                }
+                else if (currentName == "Rich")
+                {
+                    currentAnim.SetBool("isRich", true);
+                    currentAnim.SetFloat("LastY", 1.0f);
+
+                }
+                else if (currentName == "Rory")
+                {
+                    currentAnim.SetBool("isRory", true);
+                    currentAnim.SetFloat("LastY", 1.0f);
+
+                }
 
 
                 healthBlocks[players.IndexOf(player)].transform.GetChild(0).GetChild(1).GetChild(0).GetChild(3).GetComponent<SpriteRenderer>().sprite = currStats.bodySprite;
@@ -1115,7 +1151,9 @@ public class BattleManager : MonoBehaviour
         peekList.Clear();
         if (!chosenAction.targetsAllEnemies && !chosenAction.targetsAllAllies && !chosenAction.onlyTargetsSelf)
         {
-            battleText.SetText("Select a target!");
+
+
+
             if (enemyLine)
             {
                 targetList.Add(enemies[currentTarget]);
@@ -1127,6 +1165,11 @@ public class BattleManager : MonoBehaviour
                 targetList.Add(players[currentTarget]);
                 //peekList.Add(enemies[currentTarget]);
             }
+
+            GameObject thisIsTarget = (GameObject) targetList[0];
+
+            battleText.SetText("Select a Target!\n\nTargeting: " + thisIsTarget.GetComponent<CharacterStats>().characterName + "!");
+
         }
         else
         {

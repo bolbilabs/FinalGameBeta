@@ -68,6 +68,7 @@ public class PlayerStats : CharacterStats
             Debug.Log(autoDialogue);
 
             autoDialogue.MessageMe(characterName + " takes " + damage + " damage!");
+            StartCoroutine(autoDialogue.flashShock(BattleManager.GetInstance().healthBlocks[BattleManager.GetInstance().players.IndexOf(this.gameObject)].transform.GetChild(0).GetChild(1).GetChild(0).GetChild(3).gameObject));
 
             //}
             //else
@@ -83,8 +84,8 @@ public class PlayerStats : CharacterStats
 
                 //if (autoDialogue.sentences.Count >= autoDialogue.actionOrder.Count)
                 //{
-
-                autoDialogue.MessageMe("Placeholder for character death.");
+                autoDialogue.defeatedPlayer = this.gameObject;
+                autoDialogue.MessageMe("^" + characterName + " has been mortally wounded...");
                 BattleManager.GetInstance().deathparam++;
 
                 //BattleManager.GetInstance().healthBlocks.RemoveAt(BattleManager.GetInstance().currentPlayer);
@@ -115,7 +116,27 @@ public class PlayerStats : CharacterStats
     // Damage the target
     public override void AttackTarget(CharacterStats target, int damage, bool ignoreDefense)
     {
-        if (target.gameObject.activeSelf && Random.Range(0, 100) < accuracy.GetValue())
+
+        bool skip = false;
+        if (!target.gameObject.activeSelf)
+        {
+            bool foundActive = false;
+            foreach (GameObject enemy in BattleManager.GetInstance().enemies)
+            {
+                if (enemy.activeSelf)
+                {
+                    foundActive = true;
+                    target = enemy.GetComponent<CharacterStats>();
+                }
+            }
+
+            if (!foundActive)
+            {
+                skip = true;
+            }
+        }
+
+        if (!skip && target.gameObject.activeSelf && Random.Range(0, 100) < accuracy.GetValue())
         {
             // Adds attack stat boost.
             damage += attack.GetValue() + (int)(hope * 0.1);
@@ -262,13 +283,19 @@ public class PlayerStats : CharacterStats
     {
         if (isGuarded)
         {
-            autoDialogue.MessageMe(characterName + " notices Rich staring. Rich conspicuously looks the other way and whistles.");
+            if (autoDialogue != null)
+            {
+                autoDialogue.MessageMe(characterName + " notices Rich staring. Rich conspicuously looks the other way and whistles.");
+            }
             isGuarded = false;
         }
 
         if (isPermahealed)
         {
-            autoDialogue.MessageMe("The last of Luna's light...&&&&&% has faded.");
+            if (autoDialogue != null)
+            {
+                autoDialogue.MessageMe("The last of Luna's light...&&&&&% has faded.");
+            }
             isPermahealed = false;
         }
 
