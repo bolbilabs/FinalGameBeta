@@ -56,6 +56,10 @@ public class DialogueManager : MonoBehaviour
 
     public bool slowDown = false;
 
+    public bool once = false;
+
+    public bool isOver = false;
+
 
     // Start is called before the first frame update
     void Awake()
@@ -86,6 +90,8 @@ public class DialogueManager : MonoBehaviour
         currentChar = 0;
 
         lineOffset = 0;
+
+        coroutineRunning = false;
 
         if (!noAnim)
         {
@@ -177,11 +183,10 @@ public class DialogueManager : MonoBehaviour
             StopAllCoroutines();
             slowDown = false;
             StartCoroutine(TypeSentence(sentence));
-
-
         }
         else
         {
+
             dialogueText.text = "<mspace=1em>" + currentSentence;
             StopAllCoroutines();
             coroutineRunning = false;
@@ -194,13 +199,18 @@ public class DialogueManager : MonoBehaviour
 
     IEnumerator TypeSentence (string sentence)
     {
+
         dialogueText.text = "<mspace=1em>";
         currentSentence = sentence;
         coroutineRunning = true;
+        int i = 0;
         foreach (char letter in sentence.ToCharArray())
         {
-
-            if (letter != '&' && letter != '%' && letter != '@' && letter != '#')
+            if (i > 0)
+            {
+                once = true;
+            }
+            if (letter != '&' && letter != '%' && letter != '@' && letter != '#' && letter != '~')
             {
                 dialogueText.text += letter;
 
@@ -224,7 +234,7 @@ public class DialogueManager : MonoBehaviour
                         }
                         if (!hasImage)
                         {
-                            if (currentLine + lineOffset >= lineSize - 4)
+                            if (currentLine + lineOffset >= bigLineSize - 2)
                             {
                                 dialogueText.text += '\n';
                                 currentLine = -1;
@@ -233,14 +243,14 @@ public class DialogueManager : MonoBehaviour
                         }
                         else
                         {
-                            if (currentLine + lineOffset >= smallLineSize - 4)
+                            if (currentLine + lineOffset >= smallLineSize - 2)
                             {
                                 dialogueText.text += '\n';
                                 currentLine = -1;
                                 escape = true;
                             }
                         }
-                        if (letter != '&' && letter != '%' && letter != '#')
+                        if (letter != '&' && letter != '%' && letter != '#' && letter != '~')
                         {
                             lineOffset++;
                         }
@@ -261,8 +271,14 @@ public class DialogueManager : MonoBehaviour
                 dialogueText.text += '\n';
                 currentLine = -1;
             }
+            if (letter == '~')
+            {
+                Camera.main.gameObject.GetComponent<FadeOut>().enabled = true;
+            }
             currentChar++;
             currentLine++;
+
+            i++;
             yield return new WaitForSeconds(timeDelay);
         }
         coroutineRunning = false;
@@ -271,6 +287,7 @@ public class DialogueManager : MonoBehaviour
 
     public void EndDialogue()
     {
+        once = false;
         //Debug.Log("End of Conversation");
         //animator.SetBool("IsOpen", false);
         //rb.constraints = RigidbodyConstraints2D.FreezeRotation;
@@ -305,7 +322,7 @@ public class DialogueManager : MonoBehaviour
 
     void Update()
     {
-        if (!slowDown && !GameControl.isBattling && (Input.GetKeyDown("z") || Input.GetKeyDown("x")))
+        if (once && !slowDown && !GameControl.isBattling && (Input.GetKeyDown("z") || Input.GetKeyDown("x")))
         {
             DisplayNextSentence();
         }

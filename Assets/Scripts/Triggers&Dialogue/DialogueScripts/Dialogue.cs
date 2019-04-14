@@ -18,4 +18,5 @@ public class Dialogue
 
     public MonoBehaviour[] scriptTriggers;
 
+    public bool notAnimated = false;
 }

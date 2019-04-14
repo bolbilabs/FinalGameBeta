@@ -69,6 +69,17 @@ public class AutoDialogue : MonoBehaviour
     public Dialogue gameOver1;
 
 
+
+    public Dialogue gameOver2Paul;
+    public Dialogue gameOver2Luna;
+    public Dialogue gameOver2Rich;
+    public Dialogue gameOver2Rory;
+
+    public Dialogue gameOver3;
+
+
+
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -373,7 +384,7 @@ public class AutoDialogue : MonoBehaviour
             currentLine = 0;
             foreach (char letter in sentence.ToCharArray())
             {
-                if (letter != '&' && letter != '%' && letter != '@' && letter != '^')
+                if (letter != '&' && letter != '%' && letter != '@' && letter != '^' && letter != '~')
                 {
                     dialogueText.text += letter;
                 }
@@ -398,7 +409,7 @@ public class AutoDialogue : MonoBehaviour
                                 currentLine = -1;
                                 escape = true;
                             }
-                            if (letter != '&' && letter != '%' && letter != '^')
+                            if (letter != '&' && letter != '%' && letter != '^' && letter != '~')
                             {
                                 lineOffset++;
                             }
@@ -430,6 +441,12 @@ public class AutoDialogue : MonoBehaviour
                     GameControl.characterOut = defeatedPlayer;
                     GameControl.downCut = true;
                     StartCoroutine(defeatedCharacter(defeatedPlayer));
+                }
+                if (letter == '~')
+                {
+                    GameControl.isBattling = false;
+                    defeated = true;
+                    hopeDialogue(GameControl.hopingHero);
                 }
                 currentChar++;
                 currentLine++;
@@ -644,16 +661,52 @@ public class AutoDialogue : MonoBehaviour
                 DisplayNextSentence();
             }
         } else if (gameOverState == 1)
-        {
+    {
             if (Input.GetKeyDown("z"))
             {
                 if (!quitSelected)
                 {
-                    Camera.main.GetComponent<Animator>().SetBool("IsGlitching", true);
-                    StopAllCoroutines();
-                    StartCoroutine(scrambleDelay());
-                    gameOverState = 2;
-                } else if (quitSelected)
+                    if (GameControl.numDeaths == 0)
+                    {
+                        Camera.main.GetComponent<Animator>().SetBool("IsGlitching", true);
+                        StopAllCoroutines();
+                        StartCoroutine(scrambleDelay());
+                        gameOverState = 2;
+                    } else if (GameControl.numDeaths == 1)
+                    {
+                        GameObject.FindGameObjectWithTag("GameOver").gameObject.SetActive(false);
+                        postBattleDialogue.longDialogueText.gameObject.transform.parent.gameObject.SetActive(true);
+
+                        string currentName = GameControl.characterOut.GetComponent<PlayerStats>().characterName;
+
+                        if (currentName == "Paul")
+                        {
+                            postBattleDialogue.StartDialogue(gameOver2Paul);
+                        }
+                        else if (currentName == "Luna")
+                        {
+                            postBattleDialogue.StartDialogue(gameOver2Luna);
+                        }
+                        else if (currentName == "Rich")
+                        {
+                            postBattleDialogue.StartDialogue(gameOver2Rich);
+                        }
+                        else if (currentName == "Rory")
+                        {
+                            postBattleDialogue.StartDialogue(gameOver2Rory);
+                        }
+
+                        gameOverState = 2;
+                    } else if (GameControl.numDeaths == 2)
+                    {
+                        GameObject.FindGameObjectWithTag("GameOver").gameObject.SetActive(false);
+                        postBattleDialogue.longDialogueText.gameObject.transform.parent.gameObject.SetActive(true);
+
+                        postBattleDialogue.StartDialogue(gameOver3);
+                        gameOverState = 2;
+                    }
+                }
+                else if (quitSelected)
                 {
                     Application.Quit();
                 }
@@ -671,7 +724,7 @@ public class AutoDialogue : MonoBehaviour
                     GameObject.FindGameObjectWithTag("GameOver").transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = new Color32(97, 225, 108, 255);
                     GameObject.FindGameObjectWithTag("GameOver").transform.GetChild(2).GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Underline;
                 }
-                else
+                else if (GameControl.numDeaths < 3)
                 {
                     GameObject.FindGameObjectWithTag("GameOver").transform.GetChild(2).GetComponent<TextMeshProUGUI>().color = new Color32(255, 255, 255, 255);
                     GameObject.FindGameObjectWithTag("GameOver").transform.GetChild(2).GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Normal;
@@ -680,6 +733,7 @@ public class AutoDialogue : MonoBehaviour
                     GameObject.FindGameObjectWithTag("GameOver").transform.GetChild(1).GetComponent<TextMeshProUGUI>().fontStyle = FontStyles.Underline;
                 }
             }
+            
         } else if (gameOverState == 2)
         {
 
@@ -698,7 +752,18 @@ public class AutoDialogue : MonoBehaviour
         bonusSentences.Add(sentenceAdd);
     }
 
-
+    public void hopeDialogue(Action action)
+    {
+        if (action != null)
+        {
+            postBattleDialogue.shortDialogueText.gameObject.transform.parent.gameObject.SetActive(true);
+            postBattleDialogue.StartDialogue(action.hopeDialogue);
+        }
+        else
+        {
+            defeated = false;
+        }
+    }
 
     public IEnumerator defeatedCharacter (GameObject player)
     {
@@ -724,6 +789,37 @@ public class AutoDialogue : MonoBehaviour
         fadeColor = dialogueText.transform.parent.gameObject.GetComponent<Image>().color;
 
 
+        if (GameControl.numDeaths > 0)
+        {
+            if (GameControl.numDeaths > 2)
+            {
+
+                string currentName = defeatedPlayer.GetComponent<PlayerStats>().characterName;
+
+                if (currentName == "Paul")
+                {
+                    GameObject.FindGameObjectWithTag("GameOver").transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "A Dream Worth Smiling For";
+                }
+                else if (currentName == "Luna")
+                {
+                    GameObject.FindGameObjectWithTag("GameOver").transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "A Ride Into The Sunset";
+                }
+                else if (currentName == "Rich")
+                {
+                    GameObject.FindGameObjectWithTag("GameOver").transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Going Alone";
+                }
+                else if (currentName == "Rory")
+                {
+                    GameObject.FindGameObjectWithTag("GameOver").transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "True Bravery";
+                }
+            }
+            else
+            {
+                GameObject.FindGameObjectWithTag("GameOver").transform.GetChild(0).GetComponent<TextMeshProUGUI>().text = "Your Choice";
+            }
+        }
+
+
         for (float i = 0; i < 1; i += 0.01f)
         {
 
@@ -732,6 +828,11 @@ public class AutoDialogue : MonoBehaviour
             for (int j = 0;  j< GameObject.FindGameObjectWithTag("GameOver").transform.childCount; j++)
             {
                 GameObject.FindGameObjectWithTag("GameOver").transform.GetChild(j).GetComponent<TextMeshProUGUI>().alpha = i;
+            }
+
+            if (GameControl.numDeaths > 2)
+            {
+                GameObject.FindGameObjectWithTag("GameOver").transform.GetChild(1).GetComponent<TextMeshProUGUI>().enabled = false;
             }
 
             dialogueText.GetComponent<TextMeshProUGUI>().alpha = 1.0f - i;

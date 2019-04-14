@@ -14,4 +14,15 @@ public class SceneChangeEvents : MonoBehaviour
     {
         SceneManager.LoadScene("Overworld");
     }
+
+    public void ToFinalBattle()
+    {
+        SceneManager.LoadScene("FinalBattle");
+    }
+
+    public void ToHopeEnding()
+    {
+        SceneManager.LoadScene("Aftermath");
+    }
+
 }

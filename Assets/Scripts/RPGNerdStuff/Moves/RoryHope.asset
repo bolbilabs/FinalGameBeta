@@ -24,5 +24,11 @@ MonoBehaviour:
   cannotTargetSelf: 0
   onlyTargetsSelf: 1
   description: Hope. It's a simple, yet powerful thing.
-  message: Rory hopes from the bottom of his heart&&&.&&&.&&&.&&& But it's hopeless!
+  message: Rory hopes from the bottom of his heart&&&.&&&.&&&.&&&
   priority: 0
+  hopeDialogue:
+    face: []
+    clips: []
+    sentences: []
+    scriptTriggers: []
+    notAnimated: 0

@@ -78,7 +78,10 @@ public class CharacterStats : MonoBehaviour
         }
 
         autoDialogue.MessageMe(superlative + characterName + " takes " + damage + " damage!");
-        StartCoroutine(autoDialogue.flashShock(this.gameObject));
+        if (!GameControl.finalBattle)
+        {
+            StartCoroutine(autoDialogue.flashShock(this.gameObject));
+        }
 
         if (currentHealth <= 0)
         {

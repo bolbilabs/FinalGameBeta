@@ -1057,6 +1057,10 @@ GameObject:
   - component: {fileID: 727565336}
   - component: {fileID: 727565340}
   - component: {fileID: 727565338}
+  - component: {fileID: 727565341}
+  - component: {fileID: 727565339}
+  - component: {fileID: 727565342}
+  - component: {fileID: 727565343}
   m_Layer: 0
   m_Name: BattleManager
   m_TagString: BattleManager
@@ -1193,6 +1197,211 @@ MonoBehaviour:
     - Are you still crazy enough to force them to continue?
     scriptTriggers:
     - {fileID: 727565336}
+    notAnimated: 0
+  gameOver2Paul:
+    face:
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300008, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    clips:
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: 60fd86ac5e9cc45e988cd43093150c2e, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    sentences:
+    - Hey, uh. I know this is a weird question an' all that...
+    - But do you guys have dreams an' stuff?
+    - I d-dream of not being afraid. Big and strong.
+    - I've got my dream horse right here, so I'm set!
+    - Not answering. Dreams are for losers.
+    - All righty then.
+    - I think. One day. When our journey is said an' done...
+    - I'd like to be a rock 'n' roll star. Somebody like Blues Berry.
+    - That's why I sell these papers here. Some day, I'll save enough...
+    - Enough to buy my first guitar and live the dream.
+    scriptTriggers:
+    - {fileID: 727565341}
+    notAnimated: 0
+  gameOver2Luna:
+    face:
+    - {fileID: 21300008, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300008, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300008, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300008, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300008, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    clips:
+    - {fileID: 8300000, guid: 60fd86ac5e9cc45e988cd43093150c2e, type: 3}
+    - {fileID: 8300000, guid: 60fd86ac5e9cc45e988cd43093150c2e, type: 3}
+    - {fileID: 8300000, guid: 60fd86ac5e9cc45e988cd43093150c2e, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: 60fd86ac5e9cc45e988cd43093150c2e, type: 3}
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    - {fileID: 8300000, guid: 60fd86ac5e9cc45e988cd43093150c2e, type: 3}
+    sentences:
+    - Ah, isn't this nice?
+    - Riding the open fields on our trusty steeds.
+    - This is what true freedom feels like, Big Red!
+    - Hey, just who you callin' "Big Red?"
+    - My horse, of course!
+    - Hate to break it to ya, but that horse is like a grayish blue.
+    - Well. I'm color blind, so he's red in my heart.
+    scriptTriggers:
+    - {fileID: 727565341}
+    notAnimated: 0
+  gameOver2Rich:
+    face:
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300008, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    clips:
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    - {fileID: 8300000, guid: 60fd86ac5e9cc45e988cd43093150c2e, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    sentences:
+    - I told ya a million times. No.
+    - I'm a loner, ya hear?
+    - C'mon Rich! You're like the toughest guy around town.
+    - We need a powerful lone ranger like you to join our posse!
+    - Nope and nope.
+    - L-let's go guys. We don't need him.
+    - Hey. You're one to talk small-fry.
+    - S-sorry! Please don't hurt me, m-man!
+    - Wow. Just wow.
+    - '...'
+    - Yeah, there's no way ya jokers will survive.
+    - So, it looks like Ramblin' Rich will have to save the day!
+    - R-Really? You're the man, Rich!
+    - Yeah, yeah. I know. I know.
+    - Take notes. I'll show ya what it really means to be...
+    - MACHO!
+    - HUSTLE!
+    - FLEEEEX!
+    - OH YEAH, BABY! Rich's back in business. Feels good.
+    scriptTriggers:
+    - {fileID: 727565341}
+    notAnimated: 0
+  gameOver2Rory:
+    face:
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300008, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300008, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300008, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300008, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    clips:
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: 60fd86ac5e9cc45e988cd43093150c2e, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: 60fd86ac5e9cc45e988cd43093150c2e, type: 3}
+    - {fileID: 8300000, guid: 60fd86ac5e9cc45e988cd43093150c2e, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    - {fileID: 8300000, guid: 60fd86ac5e9cc45e988cd43093150c2e, type: 3}
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    sentences:
+    - You guys need to g-get away from me!
+    - Why? What's wrong, partner?
+    - I'm d-dangerous. You hear?
+    - I dunno. You look a little frail to me.
+    - Everyone who gets near me... They...
+    - They only suffer.
+    - The radiation that I possess. It hurts others...
+    - Great!
+    - Great?
+    - Yeah! Those big bad mutants out there...
+    - We need to give 'em an old whallop.
+    - Well. I'll hurt you guys too... Just like...
+    - Don't worry about it! We've got radiation too, so we can get by!
+    - Y-you mean it? Well... if that's the case... maybe I can-
+    - That's the spirit Rory!
+    - Next, Let's round up that infamous outlaw.
+    - Yeah! Rich will be a strong member to add to our team.
+    - RICH?!? Uh. Uh.
+    - Maybe it wasn't such a good idea joining you guys...
+    scriptTriggers:
+    - {fileID: 727565341}
+    notAnimated: 0
+  gameOver3:
+    face:
+    - {fileID: 0}
+    clips:
+    - {fileID: 8300000, guid: 7cf59f7e37e6f4eb6bd24ec1c0909146, type: 3}
+    sentences:
+    - '#&&&&&...'
+    scriptTriggers:
+    - {fileID: 727565342}
+    - {fileID: 727565343}
+    notAnimated: 0
 --- !u!82 &727565338
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1289,6 +1498,82 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!114 &727565339
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 727565333}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5eab070675c18441cbf2c5c41d47ad75, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogue:
+    face:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    clips:
+    - {fileID: 8300000, guid: 7cf59f7e37e6f4eb6bd24ec1c0909146, type: 3}
+    - {fileID: 8300000, guid: 7cf59f7e37e6f4eb6bd24ec1c0909146, type: 3}
+    - {fileID: 8300000, guid: 7cf59f7e37e6f4eb6bd24ec1c0909146, type: 3}
+    - {fileID: 8300000, guid: 7cf59f7e37e6f4eb6bd24ec1c0909146, type: 3}
+    - {fileID: 8300000, guid: 7cf59f7e37e6f4eb6bd24ec1c0909146, type: 3}
+    - {fileID: 8300000, guid: 7cf59f7e37e6f4eb6bd24ec1c0909146, type: 3}
+    - {fileID: 8300000, guid: 7cf59f7e37e6f4eb6bd24ec1c0909146, type: 3}
+    - {fileID: 8300000, guid: 7cf59f7e37e6f4eb6bd24ec1c0909146, type: 3}
+    - {fileID: 8300000, guid: 7cf59f7e37e6f4eb6bd24ec1c0909146, type: 3}
+    - {fileID: 8300000, guid: 7cf59f7e37e6f4eb6bd24ec1c0909146, type: 3}
+    - {fileID: 8300000, guid: 7cf59f7e37e6f4eb6bd24ec1c0909146, type: 3}
+    - {fileID: 8300000, guid: 7cf59f7e37e6f4eb6bd24ec1c0909146, type: 3}
+    - {fileID: 8300000, guid: 7cf59f7e37e6f4eb6bd24ec1c0909146, type: 3}
+    - {fileID: 8300000, guid: 7cf59f7e37e6f4eb6bd24ec1c0909146, type: 3}
+    - {fileID: 8300000, guid: 7cf59f7e37e6f4eb6bd24ec1c0909146, type: 3}
+    - {fileID: 8300000, guid: 7cf59f7e37e6f4eb6bd24ec1c0909146, type: 3}
+    - {fileID: 8300000, guid: 7cf59f7e37e6f4eb6bd24ec1c0909146, type: 3}
+    - {fileID: 8300000, guid: 7cf59f7e37e6f4eb6bd24ec1c0909146, type: 3}
+    - {fileID: 8300000, guid: 7cf59f7e37e6f4eb6bd24ec1c0909146, type: 3}
+    sentences:
+    - '...'
+    - Have you ever turned on the TV at the end of a movie?
+    - It's quite the surreal feeling...
+    - Seeing already-developed characters take on the world.
+    - Makes you want to find out more about them.
+    - Explore their lives to that point.
+    - Understand.
+    - Sadly, the television such an archaic device.
+    - You cannot rewind and see the movie from the beginning.
+    - You know the end. The destination without the journey.
+    - As a result, you can never experience the beginning in the same way again.
+    - You'll never understand what it's like to not know.
+    - '...'
+    - This game. It's simply the end of a journey.
+    - However, I thought it would be fair to share with you a memory...
+    - A memory that the characters have lived through.
+    - And although it's simply just text on a screen, hopefully it's enough...
+    - To make you understand the weight of your choices.
+    - '#The destination awaits.'
+    scriptTriggers:
+    - {fileID: 727565342}
+    notAnimated: 0
 --- !u!114 &727565340
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1315,6 +1600,46 @@ MonoBehaviour:
   noAnim: 1
   notOverworld: 1
   slowDown: 0
+  once: 0
+  isOver: 0
+--- !u!114 &727565341
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 727565333}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3b5b73e84bb954a138e85cbd903f812f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueTrigger: {fileID: 727565339}
+  dialogueManager: {fileID: 727565340}
+--- !u!114 &727565342
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 727565333}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2504ca5f932404d70ad05df32c44addc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &727565343
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 727565333}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8703e52da2d614ea5b1527f36299b5d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &754273788
 GameObject:
   m_ObjectHideFlags: 0
@@ -3797,15 +4122,15 @@ RectTransform:
   m_GameObject: {fileID: 1755762810}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.0709612, y: 0.9386718, z: 1}
   m_Children: []
   m_Father: {fileID: 1993914386}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 103}
-  m_SizeDelta: {x: 316, y: 50}
+  m_AnchoredPosition: {x: 0.42, y: 91.11}
+  m_SizeDelta: {x: 461.15, y: 75.34}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1755762812
 MonoBehaviour:
@@ -3863,7 +4188,7 @@ MonoBehaviour:
   m_fontSizeMin: 18
   m_fontSizeMax: 72
   m_fontStyle: 1
-  m_textAlignment: 258
+  m_textAlignment: 1026
   m_isAlignmentEnumConverted: 1
   m_characterSpacing: 0
   m_wordSpacing: 0
@@ -3874,7 +4199,7 @@ MonoBehaviour:
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: 0
+  m_firstOverflowCharacterIndex: -1
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
   m_isTextTruncated: 0
@@ -4101,6 +4426,7 @@ MonoBehaviour:
     - Perhaps they can go out with bang.
     scriptTriggers:
     - {fileID: 1794861519}
+    notAnimated: 0
 --- !u!114 &1794861519
 MonoBehaviour:
   m_ObjectHideFlags: 0

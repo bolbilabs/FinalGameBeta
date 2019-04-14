@@ -24,5 +24,56 @@ MonoBehaviour:
   cannotTargetSelf: 0
   onlyTargetsSelf: 1
   description: Hope. It's a simple, yet powerful thing.
-  message: Rich hopes from the bottom of his heart&&&.&&&.&&&.&&& But it's hopeless!
+  message: Rich hopes from the bottom of his heart&&&.&&&.&&&.&&&
   priority: 0
+  hopeDialogue:
+    face:
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300004, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    clips:
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    - {fileID: 8300000, guid: e6b8925942c1a4015b3b0fb0424ee079, type: 3}
+    sentences:
+    - All right you guys.
+    - Very funny.
+    - '#This wasn''t what I meant when I said I like being alone.'
+    - You all just can't go ahead and die on me.
+    - I thought I could take on the world alone.
+    - Man, was I wrong.
+    - '#&&&.&&&.&&&.&&No!'
+    - Paul. Luna. Rory.
+    - I can't let you guys down.
+    - Especially you, Rory. I gotta show you...
+    - '#What it''s like...'
+    - '#To be...'
+    - '#MACHO!'
+    - '#HUSTLE!'
+    - '#~&F&L&E&E&E&E&E&X&!'
+    scriptTriggers: []
+    notAnimated: 0

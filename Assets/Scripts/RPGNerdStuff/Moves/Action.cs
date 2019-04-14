@@ -40,6 +40,10 @@ public class Action : ScriptableObject
 
     public int priority = 0;
 
+
+    public Dialogue hopeDialogue;
+
+
     public virtual int Peek (CharacterStats player, CharacterStats target)
     {
         // Displays if attack is lethal to active target.
@@ -54,9 +58,24 @@ public class Action : ScriptableObject
 
     public virtual void Perform (CharacterStats player, CharacterStats target)
     {
-        // Broadcast message
+        // Broadcast message But it's hopeless!
 
         // Perform 
+        if (moveName == "Hope")
+        {
+            if (!GameControl.finalBattle)
+            {
+                GameObject.FindWithTag("BattleManager").GetComponent<AutoDialogue>().MessageMe("But it's hopeless!");
+            }
+            else
+            {
+                GameControl.hopingHero = this;
+                GameControl.characterOut = player.gameObject;
+                GameObject.FindWithTag("Enemy").GetComponent<SpriteRenderer>().color = new Color32(255, 255, 255, 25);
+                GameObject.FindWithTag("BattleManager").GetComponent<AutoDialogue>().MessageMe("~...");
+            }
+        }
+
     }
 
     public virtual void PerformPassive(CharacterStats player, CharacterStats target)

@@ -24,10 +24,16 @@ public class GameControl : MonoBehaviour
 
     public static bool isBattling = false;
 
-    public static int numDeaths = 0;
+    public static int numDeaths = 3;
     public static bool downCut = false;
     public static bool downCut2 = false;
     public static GameObject characterOut;
+
+    public static bool noMasEnemies = false;
+
+    public static bool finalBattle = false;
+
+    public static Action hopingHero;
 
 
     void Awake()
@@ -171,9 +177,9 @@ public class GameControl : MonoBehaviour
         {
             for (int i = 0; i < GameObject.FindWithTag("MapEnemies").transform.childCount; i++)
             {
-                if (disabledEnemy.ContainsKey(i))
+                if (noMasEnemies || disabledEnemy.ContainsKey(i))
                 {
-                    if (disabledEnemy[i])
+                    if (noMasEnemies || disabledEnemy[i])
                     {
                         GameObject.FindWithTag("MapEnemies").transform.GetChild(i).gameObject.SetActive(false);
                     }
@@ -216,6 +222,33 @@ public class GameControl : MonoBehaviour
                 downCut = false;
                 downCut2 = true;
             }
+        } else if (scene == SceneManager.GetSceneByName("Aftermath"))
+        {
+            GameObject downPlayer = GameObject.FindWithTag("KOChar");
+
+            string currentName = characterOut.GetComponent<PlayerStats>().characterName;
+
+            Animator currentAnim = downPlayer.GetComponent<Animator>();
+
+            if (currentName == "Paul")
+            {
+                currentAnim.SetBool("isPaul", true);
+            }
+            else if (currentName == "Luna")
+            {
+                currentAnim.SetBool("isLuna", true);
+
+            }
+            else if (currentName == "Rich")
+            {
+                currentAnim.SetBool("isRich", true);
+            }
+            else if (currentName == "Rory")
+            {
+                currentAnim.SetBool("isRory", true);
+            }
+
+            currentAnim.SetBool("IsKO", true);
         }
     }
 }

@@ -6,7 +6,10 @@ public class TalkingObject : MonoBehaviour
 {
     public DialogueTrigger dialogueTrigger;
 
+    public DialogueManager dialogueManager;
+
     bool triggered;
+
 
 
     // Start is called before the first frame update
@@ -21,7 +24,9 @@ public class TalkingObject : MonoBehaviour
         {
             if (!GameControl.isFrozen && (Input.GetKeyDown("z") && !FindObjectOfType<DialogueManager>().inCutscene))
             {
-                dialogueTrigger.TriggerDialogue();
+                //dialogueTrigger.TriggerDialogue();
+                dialogueManager.StartDialogue(dialogueTrigger.dialogue);
+
             }
         }
         //Debug.Log(GameControl.isFrozen);

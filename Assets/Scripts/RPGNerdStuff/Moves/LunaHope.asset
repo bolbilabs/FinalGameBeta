@@ -24,5 +24,53 @@ MonoBehaviour:
   cannotTargetSelf: 0
   onlyTargetsSelf: 1
   description: Hope. It's a simple, yet powerful thing.
-  message: Luna hopes from the bottom of her heart&&&.&&&.&&&.&&& But it's hopeless!
+  message: Luna hopes from the bottom of her heart&&&.&&&.&&&.&&&
   priority: 0
+  hopeDialogue:
+    face:
+    - {fileID: 21300008, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300008, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300008, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300008, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300008, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300008, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300008, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300008, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300008, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300008, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300008, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300008, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300008, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300008, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    clips:
+    - {fileID: 8300000, guid: 60fd86ac5e9cc45e988cd43093150c2e, type: 3}
+    - {fileID: 8300000, guid: 60fd86ac5e9cc45e988cd43093150c2e, type: 3}
+    - {fileID: 8300000, guid: 60fd86ac5e9cc45e988cd43093150c2e, type: 3}
+    - {fileID: 8300000, guid: 60fd86ac5e9cc45e988cd43093150c2e, type: 3}
+    - {fileID: 8300000, guid: 60fd86ac5e9cc45e988cd43093150c2e, type: 3}
+    - {fileID: 8300000, guid: 60fd86ac5e9cc45e988cd43093150c2e, type: 3}
+    - {fileID: 8300000, guid: 60fd86ac5e9cc45e988cd43093150c2e, type: 3}
+    - {fileID: 8300000, guid: 60fd86ac5e9cc45e988cd43093150c2e, type: 3}
+    - {fileID: 8300000, guid: 60fd86ac5e9cc45e988cd43093150c2e, type: 3}
+    - {fileID: 8300000, guid: 60fd86ac5e9cc45e988cd43093150c2e, type: 3}
+    - {fileID: 8300000, guid: 60fd86ac5e9cc45e988cd43093150c2e, type: 3}
+    - {fileID: 8300000, guid: 60fd86ac5e9cc45e988cd43093150c2e, type: 3}
+    - {fileID: 8300000, guid: 60fd86ac5e9cc45e988cd43093150c2e, type: 3}
+    - {fileID: 8300000, guid: 60fd86ac5e9cc45e988cd43093150c2e, type: 3}
+    sentences:
+    - Big Red, it looks like this is our last stand.
+    - There's nothing more we can do.
+    - '#To be honest, I''m scared... Horrified.'
+    - I feel like we were just a herd of cattle...
+    - Being led to become mince meat.
+    - '#&&&.&&&.&&&.&&&Wait.'
+    - Deputy Dawn always found a way out!
+    - '#And... and...'
+    - Paul, Rich, and Rory...
+    - They gave it their all so I can ride on!
+    - All right. Sheriff Luna's got one more trick up her sleeve.
+    - '#Get ready...'
+    - '#For...'
+    - '#~&B&U&L&L&E&T& E&C&L&I&S&P&S&E&!'
+    scriptTriggers: []
+    notAnimated: 0

@@ -270,6 +270,7 @@ MonoBehaviour:
     - That's probably a good idea, but I guess it isn't your choice.
     - No... Progress... Progress humanity. We must.
     scriptTriggers: []
+    notAnimated: 0
 --- !u!114 &470122
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -283,6 +284,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dialogueTrigger: {fileID: 470121}
+  dialogueManager: {fileID: 354005031}
 --- !u!1 &39685066
 GameObject:
   m_ObjectHideFlags: 0

@@ -7,10 +7,11 @@ public class TriggerDialogueStart : MonoBehaviour
 {
     public DialogueTrigger dialogueTrigger;
 
+    public DialogueManager dialogueManager;
 
     // Start is called before the first frame update
     void Start()
     {
-        dialogueTrigger.TriggerDialogue();
+        dialogueManager.StartDialogue(dialogueTrigger.dialogue);
     }
 }

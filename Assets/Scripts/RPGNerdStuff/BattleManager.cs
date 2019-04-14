@@ -112,8 +112,10 @@ public class BattleManager : MonoBehaviour
                 GameObject currentEnemy = Instantiate(enemy);
                 currentEnemy.transform.SetParent(GameObject.FindWithTag("Enemies").transform);
                 //enemies.Add(currentEnemy);
-
-                currentEnemy.GetComponent<SpriteRenderer>().material = invertMat[i];
+                if (!GameControl.finalBattle)
+                {
+                    currentEnemy.GetComponent<SpriteRenderer>().material = invertMat[i];
+                }
                 i++;
             }
         }
@@ -405,6 +407,7 @@ public class BattleManager : MonoBehaviour
         healthBarAnim = healthBlocks[currentPlayer].GetComponent<Animator>();
 
         healthBarAnim.SetInteger("State", 1);
+
 
 
 
@@ -782,7 +785,6 @@ public class BattleManager : MonoBehaviour
 
     void goToSubMenu()
     {
-        currentDial.GetComponent<DialChildren>().ForceUpdate();
 
         skipSub = false;
         menuState = 1;
@@ -796,9 +798,13 @@ public class BattleManager : MonoBehaviour
         {
             possibleActions.AddRange(players[currentPlayer].GetComponent<PlayerController>().assist);
         }
+        healthBarAnim.SetInteger("State", 1);
 
 
         UpdateUI();
+        currentDial.GetComponent<DialChildren>().ForceUpdate();
+
+
 
         // Update UI
     }
@@ -893,9 +899,16 @@ public class BattleManager : MonoBehaviour
         {
             GameObject targetY = (GameObject)enemy;
 
-            Color color = targetY.GetComponent<SpriteRenderer>().color;
-            color.r = 255; color.g = 255; color.b = 255;
-            targetY.GetComponent<SpriteRenderer>().color = color;
+            if (!GameControl.finalBattle)
+            {
+                Color color = targetY.GetComponent<SpriteRenderer>().color;
+                color.r = 255; color.g = 255; color.b = 255;
+                targetY.GetComponent<SpriteRenderer>().color = color;
+            }
+            else
+            {
+                targetY.GetComponent<Animator>().SetBool("IsTarget", false);
+            }
         }
 
         foreach (GameObject thisCharacter in characterSit)
@@ -939,20 +952,30 @@ public class BattleManager : MonoBehaviour
             {
                 GameObject targetY = (GameObject)enemy;
 
-                Color color = targetY.GetComponent<SpriteRenderer>().color;
-                if (!targetList.Contains(enemy))
+                if (!GameControl.finalBattle)
                 {
-                    color.r = 0;
-                    color.g = 0;
-                    color.b = 0;
+                    Color color = targetY.GetComponent<SpriteRenderer>().color;
+                    if (!targetList.Contains(enemy))
+                    {
+                        color.r = 0;
+                        color.g = 0;
+                        color.b = 0;
+                    }
+                    else
+                    {
+                        color.r = 0;
+                        color.g = 255;
+                        color.b = 0;
+                    }
+                    targetY.GetComponent<SpriteRenderer>().color = color;
                 }
                 else
                 {
-                    color.r = 0;
-                    color.g = 255;
-                    color.b = 0;
+                    if (!targetList.Contains(enemy))
+                    {
+                        targetY.GetComponent<Animator>().SetBool("IsTarget", true);
+                    }
                 }
-                targetY.GetComponent<SpriteRenderer>().color = color;
 
             }
             //int i = 0;
