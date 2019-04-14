@@ -27,8 +27,53 @@ MonoBehaviour:
   message: Paul hopes from the bottom of his heart&&&.&&&.&&&.&&&
   priority: 0
   hopeDialogue:
-    face: []
-    clips: []
-    sentences: []
+    face:
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300000, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    clips:
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    - {fileID: 8300000, guid: 616ecd8d69d804a48a592b0667defc41, type: 3}
+    sentences:
+    - My father always told me...
+    - '"Just keep smilin'' Paul. Just keep smilin''."'
+    - Ta be honest, though. I just can't do it.
+    - '#Not after what I''ve seen.'
+    - '#Luna. Rich. Rory... It should''a been me.'
+    - I should have saved you guys with a radiant smile.
+    - '#Forgive me...'
+    - '#&&&.&&&.&&&.&&&Hold on.'
+    - I can't let their sacrifice be in vein, now can I?
+    - And... And... If this thing gets out into the world...
+    - '#...It''s game over. No choice about it.'
+    - All right!
+    - '#It''s time to rock...'
+    - '#...AND ROLL!'
+    - '#~&S&M&I&L&E& N&O&V&A&!'
     scriptTriggers: []
     notAnimated: 0

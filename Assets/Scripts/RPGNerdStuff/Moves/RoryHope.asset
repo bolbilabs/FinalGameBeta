@@ -27,8 +27,71 @@ MonoBehaviour:
   message: Rory hopes from the bottom of his heart&&&.&&&.&&&.&&&
   priority: 0
   hopeDialogue:
-    face: []
-    clips: []
-    sentences: []
+    face:
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    - {fileID: 21300012, guid: f99867cefad234457b6f3d2f5bf1ddf8, type: 3}
+    clips:
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    - {fileID: 8300000, guid: b827b3271ddc8462796940368761e32d, type: 3}
+    sentences:
+    - W-WHY AM I HERE?!?
+    - This th-th-thing is... SCARY!
+    - '#Waaaaaaaaaaaaaa!'
+    - I can't. I can't do it.
+    - '#&&&.&&&.&&&.'
+    - If you think this is the moment where I become brave...
+    - '#&&&Think again!'
+    - I'm not brave. I can never be brave.
+    - I'm a weakling. I don't know what Paul and Luna saw in me.
+    - Rich is right.
+    - '#But... even though I''m not brave.'
+    - '#I''ve been holding back.'
+    - And now that there's no more friends around to hurt...
+    - I can use my final move.
+    - I think... In a way, Paul, Luna, and Rich knew that.
+    - They knew that if they sacrificed themselves...
+    - I can surely beat anything.
+    - OK. Here goes.
+    - '#T-Time for....'
+    - '#Me to be strong!'
+    - '#~&R&O&A&R&I&N&G& R&E&N&D&!'
     scriptTriggers: []
     notAnimated: 0
