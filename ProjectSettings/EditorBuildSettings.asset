@@ -9,6 +9,9 @@ EditorBuildSettings:
     path: 
     guid: 00000000000000000000000000000000
   - enabled: 1
+    path: Assets/Scenes/StartScreen.unity
+    guid: 5572bff8cc4166345bc9dc8bb22484da
+  - enabled: 1
     path: Assets/Scenes/Overworld.unity
     guid: f853147fc57ca334eb32c0d1d2c6caef
   - enabled: 1

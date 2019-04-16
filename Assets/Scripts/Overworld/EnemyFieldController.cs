@@ -5,6 +5,9 @@ using UnityEngine;
 public class EnemyFieldController : MonoBehaviour
 {
     public GameObject preferredEnemy;
+    public int buddyMin;
+    public int buddyMax;
+
 
     private GameObject player;
 
@@ -13,6 +16,7 @@ public class EnemyFieldController : MonoBehaviour
     public float movementSpeed = 5f;
 
     private GameObject cam;
+
 
 
     // Start is called before the first frame update
@@ -41,7 +45,7 @@ public class EnemyFieldController : MonoBehaviour
             passThis.Add(preferredEnemy);
 
 
-            for (int i = 0; i < Random.Range(0,3); i++)
+            for (int i = 0; i < Random.Range(buddyMin,buddyMax); i++)
             {
                 passThis.Add(GameControl.allEnemiesPool[Random.Range(0, GameControl.allEnemiesPool.Count)]);
             }
