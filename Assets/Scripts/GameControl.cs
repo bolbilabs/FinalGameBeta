@@ -24,7 +24,7 @@ public class GameControl : MonoBehaviour
 
     public static bool isBattling = false;
 
-    public static int numDeaths = 3;
+    public static int numDeaths = 0;
     public static bool downCut = false;
     public static bool downCut2 = false;
     public static GameObject characterOut;

@@ -32,5 +32,5 @@ MonoBehaviour:
     sentences: []
     scriptTriggers: []
     notAnimated: 0
-  baseDamage: 40
-  subDamage: 40
+  baseDamage: 10
+  subDamage: 10
