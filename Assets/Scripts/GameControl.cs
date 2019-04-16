@@ -35,6 +35,8 @@ public class GameControl : MonoBehaviour
 
     public static Action hopingHero;
 
+    public static string YourName = "Player";
+
 
     void Awake()
     {

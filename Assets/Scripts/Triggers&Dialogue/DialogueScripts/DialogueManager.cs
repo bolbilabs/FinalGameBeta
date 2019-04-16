@@ -221,8 +221,8 @@ public class DialogueManager : MonoBehaviour
             }
             if (letter == ' ')
             {
-                string subStr = sentence.Substring(currentChar-1);
-                lineOffset = 0;
+                string subStr = sentence.Substring(currentChar+1);
+                lineOffset = 1;
                 bool escape = false;
                 foreach (char letter2 in subStr.ToCharArray())
                 {
@@ -234,7 +234,7 @@ public class DialogueManager : MonoBehaviour
                         }
                         if (!hasImage)
                         {
-                            if (currentLine + lineOffset >= bigLineSize - 2)
+                            if (currentLine + lineOffset >= bigLineSize)
                             {
                                 dialogueText.text += '\n';
                                 currentLine = -1;
@@ -243,7 +243,7 @@ public class DialogueManager : MonoBehaviour
                         }
                         else
                         {
-                            if (currentLine + lineOffset >= smallLineSize - 2)
+                            if (currentLine + lineOffset >= smallLineSize)
                             {
                                 dialogueText.text += '\n';
                                 currentLine = -1;
@@ -260,6 +260,7 @@ public class DialogueManager : MonoBehaviour
             if (letter == '#')
             {
                 slowDown = true;
+                currentLine -= 1;
             }
             if (letter == '&')
             {
