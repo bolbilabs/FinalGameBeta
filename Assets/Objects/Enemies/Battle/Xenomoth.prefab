@@ -163,7 +163,7 @@ MonoBehaviour:
   defense:
     baseValue: 0
   speed:
-    baseValue: 100
+    baseValue: 0
   accuracy:
     baseValue: 100
   isGuarded: 0
