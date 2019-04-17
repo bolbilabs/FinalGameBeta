@@ -8,11 +8,14 @@ public class ContactDialogue : MonoBehaviour
 
     public DialogueManager dialogueManager;
 
+    bool finished = false;
+
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.tag == "Leader")
+        if (!finished && collision.tag == "Leader")
         {
+            finished = true;
             dialogueManager.StartDialogue(dialogue);
         }
     }

@@ -18,6 +18,9 @@ EditorBuildSettings:
     path: Assets/Scenes/BattleScene.unity
     guid: 78be3b1d9954a479b94730a2a1652165
   - enabled: 1
+    path: Assets/Scenes/Lab1.unity
+    guid: fcdd15b48e064453c9e64de1d45e6a30
+  - enabled: 1
     path: Assets/Scenes/BossRoom.unity
     guid: dbbb72fd9f91b4396aaac918013ccde6
   - enabled: 1
@@ -26,4 +29,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Aftermath.unity
     guid: daa6c69b1c68f4bbb9a3912c92ab60fc
+  - enabled: 1
+    path: Assets/Scenes/End.unity
+    guid: b1efc677eada1426a9442aa7dd8fe052
   m_configObjects: {}

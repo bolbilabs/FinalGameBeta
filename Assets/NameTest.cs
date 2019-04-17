@@ -16,7 +16,7 @@ public class NameTest : MonoBehaviour
     private string username;
 
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         //Debug.Log("UserName: " + Environment.UserName);
         //Debug.Log("UserDomainName: " + Environment.UserDomainName);

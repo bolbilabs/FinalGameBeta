@@ -31,6 +31,8 @@ public class GameControl : MonoBehaviour
 
     public static bool noMasEnemies = false;
 
+    public static string finalCharacter = "this final character";
+
     public static bool finalBattle = false;
 
     public static Action hopingHero;
@@ -173,6 +175,11 @@ public class GameControl : MonoBehaviour
         Debug.Log("Level Loaded");
         Debug.Log(scene.name);
         Debug.Log(mode);
+
+        if (noMasEnemies)
+        {
+            finalCharacter = GameObject.FindWithTag("Player").GetComponent<PlayerStats>().characterName;
+        }
 
 
         if (scene == SceneManager.GetSceneByName("Overworld"))
