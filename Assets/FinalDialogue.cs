@@ -8,23 +8,35 @@ public class FinalDialogue : MonoBehaviour
 
     public MonoBehaviour[] finale;
 
+    Dialogue dialogue = new Dialogue();
+
+    int pizza = 0;
+
+    bool once = false;
+
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        Dialogue dialogue = new Dialogue();
+        dialogue.scriptTriggers = finale;
+
+
         dialogue.sentences = new string[1];
-        dialogue.sentences[0] = "#&&&" + GameControl.YourName + "&&&&&&&&&&&& has saved the game.";
+        dialogue.sentences[0] = "#&&&" + GameControl.YourName + "&&&&& has saved the game.";
 
         dialogue.clips = new AudioClip[1];
         dialogue.face = new Sprite[1];
-        dialogue.scriptTriggers = finale;
 
-        dialogueManager.StartDialogue(dialogue);
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        if (!once && pizza > 100)
+        {
+            once = true;
+            dialogueManager.StartDialogue(dialogue);
+        }
+        pizza++;
     }
 }

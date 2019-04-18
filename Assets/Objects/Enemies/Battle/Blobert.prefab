@@ -396,7 +396,7 @@ MonoBehaviour:
   speed:
     baseValue: -10
   accuracy:
-    baseValue: 90
+    baseValue: 100
   isGuarded: 0
   isPermahealed: 0
   isRoared: 0

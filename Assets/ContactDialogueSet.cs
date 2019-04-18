@@ -41,14 +41,14 @@ public class ContactDialogueSet : MonoBehaviour
     {
         "#" + GameControl.YourName + ".",
         "#Yeah, you. I'm speaking to you.",
-        "You happen to have an \"Options\" menu of your own",
+        "You happen to have an \"Options\" menu of your own.",
         "If you hit the escape button.",
         "In your Options menu, you have only one move...",
         "\"Save.\"",
         "This means you save the game.",
         "By saving the game before a fatal blow, you prevent your last party member from falling...",
         "#But it comes with a price.",
-        "#I can't guarentee that you will make it.",
+        "#I can't guarantee that you will make it.",
         "But it's up to you... Will you save " + GameControl.finalCharacter + " or see this through?",
         "#It's your move, " + GameControl.YourName + "."
     };

@@ -603,6 +603,7 @@ GameObject:
   - component: {fileID: 977839368}
   - component: {fileID: 977839367}
   - component: {fileID: 977839372}
+  - component: {fileID: 977839366}
   m_Layer: 0
   m_Name: Canvas
   m_TagString: Untagged
@@ -610,6 +611,18 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!114 &977839366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 977839365}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 47d0ff48b224a4108969f17fe61b5b63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &977839367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -796,7 +809,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1600543971
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -817,11 +830,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_text: '<mspace=1em>OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-
-    OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO
-
-    OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO'
+  m_text: 
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: f2128d230af3b41858d653cb85872b6d, type: 2}
   m_sharedMaterial: {fileID: 21798498667670686, guid: f2128d230af3b41858d653cb85872b6d,
@@ -891,19 +900,19 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 1600543971}
-    characterCount: 116
+    characterCount: 0
     spriteCount: 0
-    spaceCount: 2
-    wordCount: 3
+    spaceCount: 0
+    wordCount: 0
     linkCount: 0
-    lineCount: 3
-    pageCount: 1
+    lineCount: 0
+    pageCount: 0
     materialCount: 1
-  m_havePropertiesChanged: 1
+  m_havePropertiesChanged: 0
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_spriteAnimator: {fileID: 0}
-  m_isInputParsingRequired: 1
+  m_isInputParsingRequired: 0
   m_inputSource: 0
   m_hasFontAssetChanged: 0
   m_subTextObjects:
@@ -955,6 +964,7 @@ GameObject:
   - component: {fileID: 1645509830}
   - component: {fileID: 1645509829}
   - component: {fileID: 1645509828}
+  - component: {fileID: 1645509831}
   m_Layer: 0
   m_Name: GameObject
   m_TagString: Untagged
@@ -1020,6 +1030,22 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1645509831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1645509827}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e5b892a84ddb497db088a0bcacb8b42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  doThese:
+  - {fileID: 757005279}
+  - {fileID: 977839372}
+  i: 0
 --- !u!1 &1687776440
 GameObject:
   m_ObjectHideFlags: 0
@@ -1037,7 +1063,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1687776441
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1202,7 +1228,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1812296827
 RectTransform:
   m_ObjectHideFlags: 0
