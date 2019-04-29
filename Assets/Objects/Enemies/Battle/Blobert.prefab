@@ -384,7 +384,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   autoDialogue: {fileID: 0}
-  characterName: Blobert the Bombslime
+  characterName: Killer Kingslime
   maxHealth:
     baseValue: 300
   currentHealth: 0
@@ -444,7 +444,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300004, guid: 10bc6982d630842f8bf17e7c10614c63, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e5fe9b1c7954547a889d42012b942a62, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

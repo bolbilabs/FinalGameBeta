@@ -8,9 +8,9 @@ public class EndSongGo : MonoBehaviour
 
     public int i = 0;
 
-    private void Update()
+    private void FixedUpdate()
     {
-        if (i > 500)
+        if (i > 350)
         {
             if (doThese.Length > 0)
             {

@@ -24,7 +24,7 @@ MonoBehaviour:
   cannotTargetSelf: 1
   onlyTargetsSelf: 0
   description: Blobert acid.
-  message: Blobert spits out explodin' acid!
+  message: The Killer Kingslime spits out explodin' acid!
   priority: 0
   hopeDialogue:
     face: []

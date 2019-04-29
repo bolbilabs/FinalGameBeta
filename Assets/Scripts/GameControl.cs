@@ -79,15 +79,15 @@ public class GameControl : MonoBehaviour
 
     public void Update()
     {
-        if (Input.GetKeyDown("j"))
-        {
-            StartBattle(enemyPool);
-        }
+        //if (Input.GetKeyDown("j"))
+        //{
+        //    StartBattle(enemyPool);
+        //}
 
-        if (Input.GetKeyDown("k"))
-        {
-            EndBattle();
-        }
+        //if (Input.GetKeyDown("k"))
+        //{
+        //    EndBattle();
+        //}
     }
 
     public static void StartBattle(List<GameObject> enemiez)

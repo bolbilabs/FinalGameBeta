@@ -42,7 +42,7 @@ public class ContactDialogueSet : MonoBehaviour
         "#" + GameControl.YourName + ".",
         "#Yeah, you. I'm speaking to you.",
         "You happen to have an \"Options\" menu of your own.",
-        "If you hit the escape button.",
+        "If you hit the escape button during your final fight.",
         "In your Options menu, you have only one move...",
         "\"Save.\"",
         "This means you save the game.",

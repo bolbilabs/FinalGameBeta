@@ -23,8 +23,8 @@ MonoBehaviour:
   targetsSelfPassive: 1
   cannotTargetSelf: 1
   onlyTargetsSelf: 0
-  description: Blobert Explodes.
-  message: Blobert spontaneously explodes!
+  description: The King violently Explodes.
+  message: The Killer Kingslime spontaneously explodes!
   priority: 0
   hopeDialogue:
     face: []
